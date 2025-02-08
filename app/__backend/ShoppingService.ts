@@ -3,53 +3,40 @@ import { randomUUID } from "crypto";
 import { ShoppingItem } from "../types";
 import { revalidatePath } from "next/cache";
 
-let shoppingList: ShoppingItem[] = [
-  {
-    id: randomUUID(),
-    name: "Apples",
-    added: new Date(),
-    done: false,
-  },
-];
+import { generateClient } from "aws-amplify/data";
+import type { Schema } from "../../amplify/data/resource";
+
+const client = generateClient<Schema>();
 
 export async function getShoppingList(): Promise<ShoppingItem[]> {
-  return shoppingList.filter((t) => !t.done).sort((a, b) => a.added.getTime() - b.added.getTime());
+  const { data } = await client.models.ShoppingList.list({ filter: { done: { eq: false } } });
+  return data
+    .map((item) => ({
+      id: item.id,
+      name: item.name,
+      note: item.note,
+      added: new Date(item.added),
+      done: item.done,
+    }))
+    .sort((a, b) => a.added.getTime() - b.added.getTime());
 }
 
 export async function countPendingItems(): Promise<number> {
-  return shoppingList.filter((t) => !t.done).length;
+  return (await client.models.ShoppingList.list({ filter: { done: { eq: false } } })).data.length || 0;
 }
 
 export async function addItem(name: string, note?: string): Promise<void> {
-  shoppingList.push({
+  await client.models.ShoppingList.create({
     id: randomUUID(),
     name,
-    note,
-    added: new Date(),
+    note: note || "",
+    added: new Date().getTime(),
     done: false,
   });
-  revalidatePath("/shopping");
-}
-
-export async function editItem(id: string, name: string, note?: string): Promise<void> {
-  const item = shoppingList.find((item) => item.id === id);
-  if (item) {
-    item.name = name;
-    item.note = note;
-  }
-}
-
-export async function deleteItem(id: string): Promise<void> {
-  const index = shoppingList.findIndex((item) => item.id === id);
-  if (index !== -1) {
-    shoppingList = shoppingList.filter((item) => item.id !== id);
-  }
+  revalidatePath("/");
 }
 
 export async function toggleItemStatus(id: string): Promise<void> {
-  const item = shoppingList.find((item) => item.id === id);
-  if (item) {
-    item.done = !item.done;
-  }
-  revalidatePath("/shopping");
+  await client.models.ShoppingList.update({ id, done: true });
+  revalidatePath("/");
 }

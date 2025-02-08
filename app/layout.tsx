@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./globalicon.css";
+import { Amplify } from "aws-amplify";
+import outputs from "../amplify_outputs.json";
+
+Amplify.configure(outputs);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} h-screen`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} h-screen bg-gradient-to-b from-background to-background-to`}
+      >
         <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="w-screen md:h-12" />
         {children}
         <footer className="fixed bottom-0 w-full bg-theme_primary text-white text-center p-2 flex gap-3 justify-end">
