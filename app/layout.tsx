@@ -3,10 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./globalicon.css";
 
-// LOCAL DEVELOPMENT ONLY
-// import { Amplify } from "aws-amplify";
-// import outputs from "../amplify_outputs.json";
-// Amplify.configure(outputs);
+import { Amplify } from "aws-amplify";
+import outputs from "../amplify_outputs.json";
+Amplify.configure(outputs);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
