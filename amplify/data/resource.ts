@@ -16,6 +16,13 @@ const schema = a.schema({
       done: a.boolean().required(),
     })
     .authorization((allow) => [allow.guest()]),
+  InfoStore: a
+    .model({
+      id: a.string().required(),
+      title: a.string().required(),
+      content: a.string().required(),
+    })
+    .authorization((allow) => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

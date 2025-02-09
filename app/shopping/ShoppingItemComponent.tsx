@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toggleItemStatus } from "../__backend/ShoppingService";
 import { ShoppingItem } from "../types";
 
-function Item({ id, name, note, added, done }: ShoppingItem) {
+function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
   const [toBeRemoved, setToBeRemoved] = useState(false);
   const [removeInProgress, setRemoveInProgress] = useState(false);
 
@@ -53,4 +53,4 @@ function Item({ id, name, note, added, done }: ShoppingItem) {
   );
 }
 
-export default Item;
+export default ShoppingItemComponent;

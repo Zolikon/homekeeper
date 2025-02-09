@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { addItem } from "../__backend/ShoppingService";
 
-function AddItem() {
+function AddShoppingItem() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const {
     register,
@@ -73,4 +73,4 @@ function AddItem() {
   );
 }
 
-export default AddItem;
+export default AddShoppingItem;
