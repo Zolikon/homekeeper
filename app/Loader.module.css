@@ -1,0 +1,70 @@
+.external_container {
+  display: grid;
+  grid-template: "full";
+  grid-template-rows: 100px;
+  grid-template-columns: 100px;
+}
+
+.background_container,
+.loader_container {
+  grid-area: full;
+  display: grid;
+  grid-template:
+    "one two"
+    "three four";
+  grid-template-rows: 50px 50px;
+  grid-template-columns: 50px 50px;
+}
+
+.e1 {
+  grid-area: one;
+  background-color: rgb(83, 235, 235);
+}
+
+.e2 {
+  grid-area: two;
+  background-color: rgb(61, 169, 169);
+}
+
+.e3 {
+  grid-area: three;
+  background-color: rgb(39, 104, 104);
+}
+
+.e4 {
+  grid-area: four;
+  background-color: rgb(23, 60, 60);
+}
+
+.loader_container {
+  animation-name: flip-animation;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.loader {
+  grid-area: one;
+  background-color: rgba(51, 58, 181, 0.499);
+  z-index: 2;
+}
+
+@keyframes flip-animation {
+  0% {
+  }
+  25% {
+    transform: rotateX(0deg) rotateY(180deg);
+  }
+
+  50% {
+    transform: rotateX(180deg) rotateY(180deg);
+  }
+
+  75% {
+    transform: rotateX(180deg) rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+}

@@ -9,7 +9,6 @@ async function page() {
   return (
     <>
       <div className="flex flex-col items-center justify-start gap-3 w-full  ">
-        <h1 className="py-4 text-2xl font-extrabold">Shopping List</h1>
         {items.length > 0 ? (
           <div className="w-[90%] flex flex-col items-center h-[65vh] overflow-y-auto gap-2">
             {items.map((item) => (
