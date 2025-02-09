@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toggleItemStatus } from "../__backend/ShoppingService";
-import { ShoppingItem } from "../types";
+import { toggleItemStatus, ShoppingItem } from "../__backend/ShoppingService";
 
 function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
   const [toBeRemoved, setToBeRemoved] = useState(false);

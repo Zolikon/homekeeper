@@ -1,9 +1,10 @@
 "use client";
 
 import InfoItemComponent from "./InfoItemComponent";
-import { InfoItem } from "../types";
+
 import { useState } from "react";
 import Resetableinput from "../__components/Resetableinput";
+import { InfoItem } from "../__backend/InfoService";
 
 function InfoList({ infoList }: { infoList: InfoItem[] }) {
   const [search, setSearch] = useState("");

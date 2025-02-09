@@ -1,5 +1,4 @@
-import { getShoppingList } from "../__backend/ShoppingService";
-import { ShoppingItem } from "../types";
+import { getShoppingList, ShoppingItem } from "../__backend/ShoppingService";
 import AddShoppingItem from "./AddShoppingItem";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 import HomeButton from "../__components/HomeButton";

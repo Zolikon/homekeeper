@@ -1,5 +1,4 @@
 "use server";
-import { InfoItem } from "../types";
 import { revalidatePath } from "next/cache";
 
 import { generateClient } from "aws-amplify/data";
@@ -9,6 +8,12 @@ import outputs from "../../amplify_outputs.json";
 
 Amplify.configure(outputs);
 const client = generateClient<Schema>().models.InfoStore;
+
+export type InfoItem = {
+  id: string;
+  title: string;
+  content: string;
+};
 
 export async function getInfoList(): Promise<InfoItem[]> {
   const { data } = await client.list();

@@ -1,7 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { InfoItem } from "../types";
-import { deleteInfoItem } from "../__backend/InfoService";
+import { deleteInfoItem, InfoItem } from "../__backend/InfoService";
 
 function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
   const dialogRef = useRef<HTMLDialogElement>(null);

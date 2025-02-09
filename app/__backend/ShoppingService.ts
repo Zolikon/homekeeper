@@ -1,6 +1,5 @@
 "use server";
 import { randomUUID } from "crypto";
-import { ShoppingItem } from "../types";
 import { revalidatePath } from "next/cache";
 
 import { generateClient } from "aws-amplify/data";
@@ -10,6 +9,14 @@ import outputs from "../../amplify_outputs.json";
 
 Amplify.configure(outputs);
 const client = generateClient<Schema>().models.ShoppingList;
+
+export type ShoppingItem = {
+  id: string;
+  name: string;
+  note?: string;
+  added: Date;
+  done: boolean;
+};
 
 export async function getShoppingList(): Promise<ShoppingItem[]> {
   const { data } = await client.list({ filter: { done: { eq: false } } });
