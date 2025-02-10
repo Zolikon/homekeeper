@@ -25,7 +25,10 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-2 w-[90%] bg-gray-500 p-2 rounded-lg" onClick={openDialog}>
+      <div
+        className="flex items-center justify-center gap-2 w-[90%] bg-gray-500 p-2 rounded-lg cursor-pointer"
+        onClick={openDialog}
+      >
         <h2>{infoItem.title}</h2>
         <span className="material-symbols-outlined text-3xl">touch_app</span>
       </div>

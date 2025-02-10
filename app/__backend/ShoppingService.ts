@@ -43,7 +43,7 @@ export async function addItem(name: string, note?: string): Promise<void> {
     added: new Date().getTime(),
     done: false,
   });
-  revalidatePath("/");
+  revalidatePath("/shopping");
 }
 
 export async function toggleItemStatus(id: string): Promise<void> {

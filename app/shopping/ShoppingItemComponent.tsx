@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { toggleItemStatus, ShoppingItem } from "../__backend/ShoppingService";
+import { useShopping } from "./ShoppingContext";
 
 function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
-  const [toBeRemoved, setToBeRemoved] = useState(false);
   const [removeInProgress, setRemoveInProgress] = useState(false);
+  const context = useShopping();
 
   function scheduleRemove() {
-    setToBeRemoved(true);
+    context?.setToBeDeleted(id);
   }
 
   async function confirmRemove() {
@@ -17,23 +18,23 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
   }
 
   function cancelRemove() {
-    setToBeRemoved(false);
+    context?.setToBeDeleted(null);
   }
 
   return (
     <div
       className={`flex items-center justify-between  ${
-        toBeRemoved ? "bg-red-400" : "bg-gray-500"
-      } rounded-lg p-2 w-[90%] my-2 transition-all duration-500 h-[75px] px-5`}
+        context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
+      } rounded-lg p-2 w-[80%] md:w-[40%] my-2 transition-all duration-500 h-[75px] px-5`}
     >
       <div>
-        <h2 className="font-bold text-">{name}</h2>
+        <h2 className="font-bold text-xl">{name}</h2>
         <p>{note}</p>
         <p className="text-xs">{added.toLocaleDateString()}</p>
       </div>
 
       {!removeInProgress ? (
-        toBeRemoved ? (
+        context?.toBeDeleted === id ? (
           <div className="flex gap-4 items-center">
             <button onClick={confirmRemove}>
               <span className="material-symbols-outlined text-3xl">delete</span>

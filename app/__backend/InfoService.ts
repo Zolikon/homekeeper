@@ -13,7 +13,15 @@ export type InfoItem = {
   id: string;
   title: string;
   content: string;
+  normalizedTitle?: string;
 };
+
+function normalized(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
 export async function getInfoList(): Promise<InfoItem[]> {
   const { data } = await client.list();
@@ -22,6 +30,7 @@ export async function getInfoList(): Promise<InfoItem[]> {
       id: item.id,
       title: item.title,
       content: item.content,
+      normalizedTitle: normalized(item.title),
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
 }

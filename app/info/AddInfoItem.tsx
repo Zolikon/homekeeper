@@ -44,7 +44,7 @@ function AddInfoItem() {
   return (
     <>
       <button
-        className="size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
+        className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
         onClick={openDialog}
       >
         <span className="material-symbols-outlined text-4xl">add</span>
@@ -58,6 +58,7 @@ function AddInfoItem() {
           <label className="flex flex-col gap-1 items-center justify-between w-full">
             <span>Name</span>
             <input
+              autoFocus
               type="text"
               {...register("name", { required: true, maxLength: 20, validate: (value) => isNameAvailable(value) })}
               className={`p-2 rounded-md ${errors.name ? "bg-red-200" : ""}`}

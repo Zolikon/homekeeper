@@ -16,6 +16,11 @@ function Resetableinput({
   return (
     <div className="relative h-full w-1/2 items-center justify-center text-stone-800">
       <input
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            onChange("");
+          }
+        }}
         ref={inputRef}
         className="p-2 rounded-md w-full pr-8"
         value={value}

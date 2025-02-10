@@ -5,10 +5,13 @@ import InfoItemComponent from "./InfoItemComponent";
 import { useState } from "react";
 import Resetableinput from "../__components/Resetableinput";
 import { InfoItem } from "../__backend/InfoService";
+import { normalized } from "../utils";
 
 function InfoList({ infoList }: { infoList: InfoItem[] }) {
   const [search, setSearch] = useState("");
-  const filteredList = infoList.filter((item) => item.title.includes(search));
+  const filteredList = infoList.filter((item) =>
+    (item.normalizedTitle || normalized(item.title)).includes(normalized(search)),
+  );
 
   return (
     <>
