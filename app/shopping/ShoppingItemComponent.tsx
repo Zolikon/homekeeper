@@ -15,6 +15,9 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
   async function confirmRemove() {
     setRemoveInProgress(true);
     await toggleItemStatus(id);
+    setRemoveInProgress(false);
+    context?.setToBeDeleted(null);
+    context?.addDeletedId(id);
   }
 
   function cancelRemove() {
@@ -32,23 +35,30 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
         <p>{note}</p>
         <p className="text-xs">{added.toLocaleDateString()}</p>
       </div>
-
-      {!removeInProgress ? (
-        context?.toBeDeleted === id ? (
-          <div className="flex gap-4 items-center">
-            <button onClick={confirmRemove}>
-              <span className="material-symbols-outlined text-3xl">delete</span>
-            </button>
-            <button onClick={cancelRemove}>
-              <span className="material-symbols-outlined text-3xl">cancel</span>
-            </button>
-          </div>
+      {!context?.deletedIds.includes(id) &&
+        (!removeInProgress ? (
+          context?.toBeDeleted === id ? (
+            <div className="flex gap-4 items-center">
+              <button onClick={confirmRemove}>
+                <span className="material-symbols-outlined text-3xl">delete</span>
+              </button>
+              <button onClick={cancelRemove}>
+                <span className="material-symbols-outlined text-3xl">cancel</span>
+              </button>
+            </div>
+          ) : (
+            <input
+              className="size-6"
+              type="checkbox"
+              disabled={!!context?.toBeDeleted && context?.toBeDeleted !== id}
+              checked={done}
+              onChange={scheduleRemove}
+            />
+          )
         ) : (
-          <input className="size-6" type="checkbox" checked={done} onChange={scheduleRemove} />
-        )
-      ) : (
-        <div>Removing...</div>
-      )}
+          <div>Removing...</div>
+        ))}
+      {context?.deletedIds.includes(id) && <span className="material-symbols-outlined">done</span>}
     </div>
   );
 }

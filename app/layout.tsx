@@ -30,7 +30,8 @@ export default function RootLayout({
         <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="w-screen md:h-12" />
         {children}
         <footer className="fixed bottom-0 w-full bg-theme_primary text-white text-center p-2 flex gap-3 justify-end">
-          <p>HomeKeeper</p>
+          <p>{`HomeKeeper ${process.env.VERSION}`}</p>
+          <p>|</p>
           <p>{new Date().getUTCFullYear()}</p>
         </footer>
       </body>
