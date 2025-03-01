@@ -10,7 +10,7 @@ function AddShoppingItem() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm();
 
   function openDialog() {
@@ -22,8 +22,8 @@ function AddShoppingItem() {
     dialogRef.current?.close();
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    addItem(data.name, data.note);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    await addItem(data.name, data.note);
     reset();
     closeDialog();
   };
@@ -57,16 +57,22 @@ function AddShoppingItem() {
             <input type="text" {...register("note", { maxLength: 30 })} className="p-2 rounded-md" autoComplete="off" />
           </label>
           <div className="w-full flex gap-4">
-            <button className="bg-red-500 text-white rounded-lg p-2 w-1/2" type="button" onClick={closeDialog}>
-              Cancel
-            </button>
-            <button
-              className="bg-blue-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2"
-              type="submit"
-              disabled={!isDirty || Object.keys(errors).length > 0}
-            >
-              Add
-            </button>
+            {!isSubmitting ? (
+              <>
+                <button className="bg-red-500 text-white rounded-lg p-2 w-1/2" type="button" onClick={closeDialog}>
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2"
+                  type="submit"
+                  disabled={!isDirty || Object.keys(errors).length > 0}
+                >
+                  Add
+                </button>
+              </>
+            ) : (
+              <div>Saving...</div>
+            )}
           </div>
         </form>
       </dialog>

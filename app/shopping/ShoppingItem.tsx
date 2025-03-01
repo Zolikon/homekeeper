@@ -23,6 +23,7 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
   function cancelRemove() {
     context?.setToBeDeleted(null);
   }
+  if (context?.hiddenIds.includes(id)) return null;
 
   return (
     <div
@@ -47,13 +48,18 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
               </button>
             </div>
           ) : (
-            <input
-              className="size-6"
-              type="checkbox"
-              disabled={!!context?.toBeDeleted && context?.toBeDeleted !== id}
-              checked={done}
-              onChange={scheduleRemove}
-            />
+            <div className="flex gap-4 items-center">
+              <button onClick={() => context?.hideElement(id)}>
+                <span className="material-symbols-outlined text-xl">visibility_off</span>
+              </button>
+              <input
+                className="size-6"
+                type="checkbox"
+                disabled={!!context?.toBeDeleted && context?.toBeDeleted !== id}
+                checked={done}
+                onChange={scheduleRemove}
+              />
+            </div>
           )
         ) : (
           <div>Removing...</div>

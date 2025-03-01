@@ -49,3 +49,7 @@ export async function addItem(name: string, note?: string): Promise<void> {
 export async function toggleItemStatus(id: string): Promise<void> {
   await client.update({ id, done: true });
 }
+
+export async function refreshContent(): Promise<void> {
+  revalidatePath("/shopping");
+}
