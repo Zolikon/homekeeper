@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toggleItemStatus, ShoppingItem } from "../__backend/ShoppingService";
+import { deleteItem, ShoppingItem } from "../__backend/ShoppingService";
 import { useShopping } from "./ShoppingContext";
 
 function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
@@ -14,7 +14,7 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
 
   async function confirmRemove() {
     setRemoveInProgress(true);
-    await toggleItemStatus(id);
+    await deleteItem(id);
     setRemoveInProgress(false);
     context?.setToBeDeleted(null);
     context?.addDeletedId(id);

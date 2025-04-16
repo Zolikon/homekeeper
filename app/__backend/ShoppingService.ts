@@ -19,7 +19,7 @@ export type ShoppingItem = {
 };
 
 export async function getShoppingList(): Promise<ShoppingItem[]> {
-  const { data } = await client.list({ filter: { done: { eq: false } } });
+  const { data } = await client.list();
   return data
     .map((item) => ({
       id: item.id,
@@ -32,11 +32,11 @@ export async function getShoppingList(): Promise<ShoppingItem[]> {
 }
 
 export async function countPendingItems(): Promise<number> {
-  return (await client.list({ filter: { done: { eq: false } } })).data.length || 0;
+  return (await client.list()).data.length || 0;
 }
 
 export async function counCompletedItems(): Promise<number> {
-  return (await client.list({ filter: { done: { eq: true } } })).data.length || 0;
+  return (await client.list()).data.length || 0;
 }
 
 export async function addItem(name: string, note?: string): Promise<void> {
@@ -50,8 +50,8 @@ export async function addItem(name: string, note?: string): Promise<void> {
   revalidatePath("/shopping");
 }
 
-export async function toggleItemStatus(id: string): Promise<void> {
-  await client.update({ id, done: true });
+export async function deleteItem(id: string): Promise<void> {
+  await client.delete({ id });
 }
 
 export async function refreshContent(): Promise<void> {

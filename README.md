@@ -22,7 +22,7 @@ npx ampx sandbox
 After development shut down the sandbox
 
 ```bash
-npx ampx sandbox destroy
+npx ampx sandbox delete
 ```
 
 #### Running application

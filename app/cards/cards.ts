@@ -9,6 +9,11 @@ export const availableCards: CardType[] = [
     icon: "/lidl_icon.png",
     code: "/lidl_code.jpg",
   },
+  {
+    title: "Unipatika",
+    icon: "/unipatika_icon.png",
+    code: "/unipatika_code.jpg",
+  },
 ];
 
 export type CardType = {

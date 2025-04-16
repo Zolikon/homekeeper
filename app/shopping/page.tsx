@@ -1,6 +1,12 @@
 import { getShoppingList, ShoppingItem } from "../__backend/ShoppingService";
 import ShoppingItemComponent from "./ShoppingItem";
 import { ShoppingProvider } from "./ShoppingContext";
+import MenuHolder from "../__components/MenuHolder";
+import CardButton from "../__components/CardsButton";
+import RefreshButton from "./RefreshButton";
+import ShowHiddenButton from "./ShowHiddenButton";
+import AddShoppingItem from "./AddShoppingItem";
+import HomeButton from "../__components/HomeButton";
 
 async function page() {
   const items: ShoppingItem[] = await getShoppingList();
@@ -18,6 +24,19 @@ async function page() {
             <p className="text-2xl">No items on list</p>
           )}
         </div>
+        <MenuHolder>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center justify-end">
+              <CardButton />
+            </div>
+            <div className="flex flex-row items-center justify-center gap-2">
+              <RefreshButton />
+              <ShowHiddenButton />
+              <AddShoppingItem />
+              <HomeButton />
+            </div>
+          </div>
+        </MenuHolder>
       </ShoppingProvider>
     </>
   );
