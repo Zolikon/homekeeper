@@ -22,12 +22,6 @@ async function page() {
             <p className="text-2xl">No items on list</p>
           )}
         </div>
-        <div className="fixed bottom-14 right-4 flex gap-2">
-          <RefreshButton />
-          <ShowHiddenButton />
-          <AddShoppingItem />
-          <HomeButton />
-        </div>
       </ShoppingProvider>
     </>
   );

@@ -20,10 +20,22 @@ export default async function Home() {
         )}
       </Link>
       <Link
+        href="/cards"
+        className="bg-theme_primary font-extrabold text-2xl p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-center"
+      >
+        <p>Shopping cards</p>
+      </Link>
+      <Link
         href="/info"
         className="bg-theme_primary font-extrabold text-2xl p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-center"
       >
         <p>Info store</p>
+      </Link>
+      <Link
+        href="/admin"
+        className="bg-theme_primary font-extrabold text-2xl p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-center"
+      >
+        <p>Admin</p>
       </Link>
     </div>
   );

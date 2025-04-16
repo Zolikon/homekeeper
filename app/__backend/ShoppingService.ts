@@ -35,6 +35,10 @@ export async function countPendingItems(): Promise<number> {
   return (await client.list({ filter: { done: { eq: false } } })).data.length || 0;
 }
 
+export async function counCompletedItems(): Promise<number> {
+  return (await client.list({ filter: { done: { eq: true } } })).data.length || 0;
+}
+
 export async function addItem(name: string, note?: string): Promise<void> {
   await client.create({
     id: randomUUID(),
