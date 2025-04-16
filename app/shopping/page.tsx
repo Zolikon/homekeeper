@@ -1,10 +1,6 @@
 import { getShoppingList, ShoppingItem } from "../__backend/ShoppingService";
-import AddShoppingItem from "./AddShoppingItem";
 import ShoppingItemComponent from "./ShoppingItem";
-import HomeButton from "../__components/HomeButton";
-import RefreshButton from "./RefreshButton";
 import { ShoppingProvider } from "./ShoppingContext";
-import ShowHiddenButton from "./ShowHiddenButton";
 
 async function page() {
   const items: ShoppingItem[] = await getShoppingList();
