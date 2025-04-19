@@ -25,17 +25,11 @@ async function page() {
           )}
         </div>
         <MenuHolder>
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-row items-center justify-end">
-              <CardButton />
-            </div>
-            <div className="flex flex-row items-center justify-center gap-2">
-              <RefreshButton />
-              <ShowHiddenButton />
-              <AddShoppingItem />
-              <HomeButton />
-            </div>
-          </div>
+          <RefreshButton />
+          <ShowHiddenButton />
+          <AddShoppingItem />
+          <CardButton />
+          <HomeButton />
         </MenuHolder>
       </ShoppingProvider>
     </>

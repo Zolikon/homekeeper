@@ -48,10 +48,11 @@ function AddShoppingItem() {
             <label className="flex flex-col gap-1 items-center justify-between">
               <span>Name</span>
               <input
+                disabled={isSubmitting}
                 autoFocus
                 type="text"
                 {...register("name", { required: true, maxLength: 20 })}
-                className={`p-2 rounded-md ${errors.name ? "bg-red-300" : ""}`}
+                className={`p-2 rounded-md ${errors.name ? "bg-red-300" : ""} disabled:bg-gray-300 `}
                 autoComplete="off"
               />
               {errors.name && (
@@ -61,9 +62,10 @@ function AddShoppingItem() {
             <label className="flex flex-col gap-1 items-center justify-between">
               <span>Note</span>
               <input
+                disabled={isSubmitting}
                 type="text"
                 {...register("note", { maxLength: 30 })}
-                className="p-2 rounded-md"
+                className="p-2 rounded-md disabled:bg-gray-300 "
                 autoComplete="off"
               />
             </label>
@@ -99,6 +101,13 @@ function AddShoppingItem() {
                 />
               ))}
             </div>
+          )}
+          {!isSubmitting && (
+            <button className="absolute top-2 right-2" onClick={closeDialog}>
+              <span className="material-symbols-outlined text-4xl" onClick={closeDialog}>
+                close
+              </span>
+            </button>
           )}
         </div>
       </dialog>
