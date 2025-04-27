@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import { initialItems } from "./items";
+import { initialItems, ZooplusItem } from "./items";
 
 export interface ZooplusContextType {
   cart: { url: string; bundleSize: string; amount: number }[];
@@ -13,8 +13,7 @@ export interface ZooplusContextType {
 const ZooplusContext = createContext<ZooplusContextType | null>(null);
 
 export function ZooplusProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] =
-    useState<{ name: string; imgUrl?: string; url: string; bundleSize: string }[]>(initialItems);
+  const [items, setItems] = useState<ZooplusItem[]>(initialItems);
   const [cart, setCart] = useState<{ url: string; bundleSize: string; amount: number }[]>([]);
 
   function updateCart(url: string, bundleSize: string, amount: number) {

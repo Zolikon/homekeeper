@@ -34,7 +34,7 @@ export const initialItems: ZooplusItem[] = [
 ];
 
 export type ZooplusItem = {
-  name?: string;
+  name: string;
   url: string;
   imgUrl?: string;
   bundleSize: string;
