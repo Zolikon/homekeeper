@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { deleteInfoItem, InfoItem } from "../__backend/InfoService";
+import CopyButton from "../__components/CopyButton";
 
 function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -11,10 +12,6 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
 
   function closeDialog() {
     dialogRef.current?.close();
-  }
-
-  function copyContent() {
-    navigator.clipboard.writeText(infoItem.content);
   }
 
   async function deleteItem() {
@@ -43,12 +40,7 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
             >
               <span className="material-symbols-outlined text-3xl">delete</span>
             </button>
-            <button
-              className="bg-green-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2 flex items-center justify-center"
-              onClick={copyContent}
-            >
-              <span className="material-symbols-outlined text-3xl">content_copy</span>
-            </button>
+            <CopyButton text={infoItem.content} />
             <button
               className="bg-blue-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2 flex items-center justify-center"
               onClick={closeDialog}
