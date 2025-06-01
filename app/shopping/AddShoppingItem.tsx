@@ -49,7 +49,6 @@ function AddShoppingItem() {
               <span>Name</span>
               <input
                 disabled={isSubmitting}
-                autoFocus
                 type="text"
                 {...register("name", { required: true, maxLength: 20 })}
                 className={`p-2 rounded-md ${errors.name ? "bg-red-300" : ""} disabled:bg-gray-300 `}

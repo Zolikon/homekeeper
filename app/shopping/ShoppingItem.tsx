@@ -29,7 +29,7 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
     <div
       className={`flex items-center justify-between  ${
         context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
-      } rounded-lg p-2 w-[80%] md:w-[40%] my-2 transition-all duration-500 h-[75px] px-5`}
+      } rounded-lg p-2 w-[80%] md:w-[40%] my-2 transition-all duration-500 h-[75px] min-h-[75px] px-5`}
     >
       <div>
         <h2 className="font-bold text-xl">{name}</h2>
