@@ -16,8 +16,9 @@ export default function ScrollOverflowIndicator({ children }: Props) {
   const checkOverflow = () => {
     const el = containerRef.current;
     if (!el) return;
-    setCanScrollUp(el.scrollTop > 0);
-    setCanScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight);
+    const epsilon = 2;
+    setCanScrollUp(el.scrollTop > epsilon);
+    setCanScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight - epsilon);
   };
 
   useEffect(() => {
@@ -32,7 +33,6 @@ export default function ScrollOverflowIndicator({ children }: Props) {
     };
   }, []);
 
-  // Re-check on children change
   useEffect(() => {
     checkOverflow();
   }, [children, hiddenIds]);

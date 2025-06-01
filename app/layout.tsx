@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen bg-gradient-to-b from-background to-background-to`}
+        className={`${geistSans.variable} ${geistMono.variable} h-screen bg-gradient-to-b from-background to-background-to flex flex-col`}
       >
         <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="w-screen md:h-12" />
         {children}

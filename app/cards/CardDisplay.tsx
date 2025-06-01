@@ -22,7 +22,7 @@ function CardDisplay({ card }: { card: CardType }) {
       <button
         key={card.title}
         style={{ height: 80 }}
-        className="flex items-center justify-between gap-2 w-3/5 bg-slate-600 text-slate-700 p-4 rounded-lg"
+        className="flex items-center justify-between gap-2 w-4/5 bg-slate-600 text-slate-700 p-4 rounded-lg"
         onClick={openDialog}
       >
         <div className="p-2">
