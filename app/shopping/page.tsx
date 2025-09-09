@@ -1,6 +1,5 @@
 import { getShoppingList } from "../__backend/ShoppingService";
 import type { ShoppingItem } from "../__backend/shopping.types";
-import ShoppingItemComponent from "./ShoppingItem";
 import { ShoppingProvider } from "./ShoppingContext";
 import MenuHolder from "../__components/MenuHolder";
 import CardButton from "../__components/CardsButton";
