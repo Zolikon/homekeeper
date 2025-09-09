@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { countPendingItems } from "./__backend/ShoppingService";
+import { MdOutlineShoppingCart, MdCreditCard, MdPets, MdInfoOutline, MdDone } from "react-icons/md";
+
+const ICON_SIZE = 24;
 
 export default async function Home() {
   const pendingShoppingItems = await countPendingItems();
@@ -12,35 +15,35 @@ export default async function Home() {
           href="/shopping"
           className="bg-theme_primary  p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-between h-[50px]"
         >
-          <span className="material-symbols-outlined">shopping_cart</span>
+          <MdOutlineShoppingCart size={ICON_SIZE} />
           <p>Shop</p>
           {pendingShoppingItems > 0 ? (
             <p className=" animate-pulse text-red-600 rounded-full bg-yellow-300 size-6 flex items-center justify-center">
               {pendingShoppingItems}
             </p>
           ) : (
-            <span className="material-symbols-outlined">done</span>
+            <MdDone size={ICON_SIZE} />
           )}
         </Link>
         <Link
           href="/cards"
           className="bg-theme_primary p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-between h-[50px]"
         >
-          <span className="material-symbols-outlined">credit_card</span>
+          <MdCreditCard size={ICON_SIZE} />
           <p>Cards</p>
         </Link>
         <Link
           href="/zooplus"
           className="bg-theme_primary p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-between h-[50px]"
         >
-          <span className="material-symbols-outlined">pets</span>
+          <MdPets size={ICON_SIZE} />
           <p>Zooplus</p>
         </Link>
         <Link
           href="/info"
           className="bg-theme_primary p-2 rounded-lg w-4/5 text-center flex gap-2 items-center justify-between h-[50px]"
         >
-          <span className="material-symbols-outlined">info</span>
+          <MdInfoOutline size={ICON_SIZE} />
           <p>Info</p>
         </Link>
       </div>

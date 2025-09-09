@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { deleteItem, ShoppingItem } from "../__backend/ShoppingService";
+import { deleteItem } from "../__backend/ShoppingService";
+import type { ShoppingItem } from "../__backend/shopping.types";
 import { useShopping } from "./ShoppingContext";
+import { ICON_MAP } from "./ItemTypeSelector";
 
-function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
+function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
   const [removeInProgress, setRemoveInProgress] = useState(false);
   const context = useShopping();
 
@@ -29,34 +31,43 @@ function ShoppingItemComponent({ id, name, note, added, done }: ShoppingItem) {
     <div
       className={`flex items-center justify-between  ${
         context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
-      } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[75px] min-h-[75px] px-5`}
+      } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[80px] min-h-[80px] px-5`}
     >
-      <div>
-        <h2 className="font-bold md:text-xl">{name}</h2>
-        <p>{note}</p>
-        <p className="text-xs">{added.toLocaleDateString()}</p>
+      <div className="flex gap-4 items-center w-[85%]">
+        {ICON_MAP[type]}
+        <div className="w-3/5">
+          <h2 className="font-bold md:text-lg break-words whitespace-pre-line">{name}</h2>
+          <p className="text-xs">{added.toLocaleDateString()}</p>
+        </div>
       </div>
       {!context?.deletedIds.includes(id) &&
         (!removeInProgress ? (
           context?.toBeDeleted === id ? (
-            <div className="flex gap-4 items-center">
-              <button onClick={confirmRemove}>
-                <span className="material-symbols-outlined text-3xl">delete</span>
-              </button>
+            <div className="flex flex-col gap-2 items-center">
               <button onClick={cancelRemove}>
-                <span className="material-symbols-outlined text-3xl">cancel</span>
+                <span className="material-symbols-outlined text-2xl">cancel</span>
+              </button>
+              <button onClick={confirmRemove}>
+                <span className="material-symbols-outlined text-2xl">delete</span>
               </button>
             </div>
           ) : (
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-col gap-2 items-center">
               <button onClick={() => context?.hideElement(id)}>
                 <span className="material-symbols-outlined text-xl">visibility_off</span>
               </button>
-              <input className="size-6" type="checkbox" checked={done} onChange={scheduleRemove} />
+              <input
+                className="size-6"
+                type="checkbox"
+                checked={context?.deletedIds.includes(id)}
+                onChange={scheduleRemove}
+              />
             </div>
           )
         ) : (
-          <div>Removing...</div>
+          <div>
+            <span className="material-symbols-outlined animate-spin text-2xl">autorenew</span>
+          </div>
         ))}
       {context?.deletedIds.includes(id) && <span className="material-symbols-outlined">done</span>}
     </div>
