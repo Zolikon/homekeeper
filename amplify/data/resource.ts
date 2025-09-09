@@ -11,9 +11,8 @@ const schema = a.schema({
     .model({
       id: a.string().required(),
       name: a.string().required(),
-      note: a.string().required(),
+      type: a.string().required(),
       added: a.timestamp().required(),
-      done: a.boolean().required(),
     })
     .authorization((allow) => [allow.guest()]),
   InfoStore: a

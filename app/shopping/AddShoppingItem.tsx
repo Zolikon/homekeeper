@@ -1,12 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { addItem } from "../__backend/ShoppingService";
 import { predifinedItems } from "./predefinedItems";
+import ItemTypeSelector, { ICON_MAP } from "./ItemTypeSelector";
+import { ShoppingItemType } from "../__backend/shopping.types";
 
 function AddShoppingItem() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [currentType, setCurrentType] = useState<ShoppingItemType>(ShoppingItemType.FOOD);
   const {
     register,
     handleSubmit,
@@ -20,15 +23,16 @@ function AddShoppingItem() {
 
   function closeDialog() {
     reset();
+    setCurrentType(ShoppingItemType.FOOD);
     dialogRef.current?.close();
   }
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    await saveItem(data.name, data.note);
+    await saveItem(data.name, currentType);
   };
 
-  async function saveItem(name: string, note?: string) {
-    await addItem(name, note);
+  async function saveItem(name: string, type: ShoppingItemType) {
+    await addItem(name, type);
     reset();
     closeDialog();
   }
@@ -50,7 +54,7 @@ function AddShoppingItem() {
               <input
                 disabled={isSubmitting}
                 type="text"
-                {...register("name", { required: true, maxLength: 20 })}
+                {...register("name", { required: true, maxLength: 30 })}
                 className={`p-2 rounded-md ${errors.name ? "bg-red-300" : ""} disabled:bg-gray-300 `}
                 autoComplete="off"
               />
@@ -58,16 +62,7 @@ function AddShoppingItem() {
                 <span className="text-red-500">{errors.name.type === "required" ? "Required" : "Too long"}</span>
               )}
             </label>
-            <label className="flex flex-col gap-1 items-center justify-between">
-              <span>Note</span>
-              <input
-                disabled={isSubmitting}
-                type="text"
-                {...register("note", { maxLength: 30 })}
-                className="p-2 rounded-md disabled:bg-gray-300 "
-                autoComplete="off"
-              />
-            </label>
+            <ItemTypeSelector currentType={currentType} setCurrentType={setCurrentType} />
             <div className="w-full flex gap-4">
               {!isSubmitting ? (
                 <>
@@ -93,9 +88,9 @@ function AddShoppingItem() {
                 <PredefinedItem
                   key={item.name}
                   name={item.name}
-                  icon={item.icon}
+                  type={item.type}
                   onClickAction={() => {
-                    saveItem(item.name, "");
+                    saveItem(item.name, item.type ?? currentType);
                   }}
                 />
               ))}
@@ -116,11 +111,11 @@ function AddShoppingItem() {
 
 const PredefinedItem = ({
   name,
-  icon = null,
+  type = null,
   onClickAction,
 }: {
   name: string;
-  icon?: string | null;
+  type?: ShoppingItemType | null;
   onClickAction: () => void;
 }) => {
   return (
@@ -128,7 +123,7 @@ const PredefinedItem = ({
       className="flex gap-1 items-center justify-between bg-green-600 text-stone-200 font-bold rounded-lg p-2 w-[45%] h-12"
       onClick={onClickAction}
     >
-      {icon && <img src={icon} className="w-[30%] h-[80%] object-fill" />}
+      {type && ICON_MAP[type]}
       <p>{name}</p>
     </button>
   );

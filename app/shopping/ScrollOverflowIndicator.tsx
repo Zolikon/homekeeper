@@ -38,10 +38,10 @@ export default function ScrollOverflowIndicator({ children }: Props) {
   }, [children, hiddenIds]);
 
   return (
-    <div className="relative w-[70%] h-full">
+    <div className="relative w-[90%] h-full flex-col items-center justify-center">
       {canScrollUp && (
         <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none z-10">
-          <div className="bg-gradient-to-b from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center">
+          <div className="bg-gradient-to-b from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center rounded-t-lg">
             <span className="material-symbols-outlined text-gray-600">expand_less</span>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
       </div>
       {canScrollDown && (
         <div className="absolute bottom-0 left-0 w-full flex justify-center pointer-events-none z-10">
-          <div className="bg-gradient-to-t from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center">
+          <div className="bg-gradient-to-t from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center rounded-b-lg">
             <span className="material-symbols-outlined text-gray-600">expand_more</span>
           </div>
         </div>
