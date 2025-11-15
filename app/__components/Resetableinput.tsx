@@ -14,7 +14,7 @@ function Resetableinput({
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="relative h-full w-1/2 items-center justify-center text-stone-800">
+    <div className="relative w-1/2 items-center justify-center text-stone-800">
       <input
         onKeyDown={(e) => {
           if (e.key === "Escape") {
