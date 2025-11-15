@@ -20,10 +20,10 @@ export const initialItems: ZooplusItem[] = [
     bundleSize: "7 kg",
   },
   {
-    name: "Applaws hal",
-    url: "https://www.zooplus.hu/shop/macska/nedves_macskatap/applaws/probacsomagok/241064",
-    imgUrl: "/zooplus/applaws_hal.jpg",
-    bundleSize: "12 x 70g",
+    name: "Royal Canin Száraz",
+    url: "https://www.zooplus.hu/shop/macska/szaraz_macskatap/royal_canin/fajta_szerint/240705?activeVariant=240705.16",
+    imgUrl: "/zooplus/royal_canin_szaraz.webp",
+    bundleSize: "10 kg",
   },
   {
     name: "Royal Canin",
