@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Recipe } from "../__backend/recipe.types";
+import { MdAdd, MdDelete } from "react-icons/md";
 
 interface RecipeModalProps {
     isOpen: boolean;
@@ -115,7 +116,7 @@ export default function RecipeModal({
                                             onClick={() => handleRemoveIngredient(index)}
                                             className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-md transition-colors"
                                         >
-                                            <span className="material-symbols-outlined">delete</span>
+                                            <MdDelete size={24} />
                                         </button>
                                     )}
                                 </div>
@@ -123,10 +124,10 @@ export default function RecipeModal({
                             <button
                                 type="button"
                                 onClick={handleAddIngredient}
-                                className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline flex items-center gap-1"
+                                className="text-blue-600 dark:text-blue-400 text-sm font-medium group flex items-center gap-1"
                             >
-                                <span className="material-symbols-outlined text-sm">add</span>
-                                Add Ingredient
+                                <MdAdd size={24} />
+                                <p className="group-hover:underline">Add Ingredient</p>
                             </button>
                         </div>
                     </div>
