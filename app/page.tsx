@@ -5,6 +5,8 @@ import { PanelButton } from "./__components/PanelButton";
 
 const ICON_SIZE = 24;
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const pendingShoppingItems = await countPendingItems();
 

@@ -9,6 +9,9 @@ import AddShoppingItem from "./AddShoppingItem";
 import HomeButton from "../__components/HomeButton";
 import ShoppingList from "./ShoppingList";
 
+
+export const dynamic = 'force-dynamic';
+
 async function page() {
   const items: ShoppingItem[] = await getShoppingList();
 

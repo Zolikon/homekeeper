@@ -9,6 +9,8 @@ import IngredientRow from "./IngredientRow";
 import { normalizeString } from "@/app/__backend/utils";
 import ShoppingButton from "@/app/__components/ShoppingButton";
 
+export const dynamic = 'force-dynamic';
+
 export default async function RecipePage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     const recipe = await getRecipe(params.id);
