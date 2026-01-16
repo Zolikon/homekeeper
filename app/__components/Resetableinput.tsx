@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { MdClose } from "react-icons/md";
 
 function Resetableinput({
   value,
@@ -30,17 +31,9 @@ function Resetableinput({
       {value && (
         <button
           className="absolute right-0 top-0 h-full w-8 flex items-center justify-center"
-          onClick={() => onChange("")}
+          onClick={() => { onChange(""); inputRef.current?.focus(); }}
         >
-          <span
-            className="material-symbols-outlined"
-            onClick={() => {
-              onChange("");
-              inputRef.current?.focus();
-            }}
-          >
-            close
-          </span>
+          <MdClose size={24} />
         </button>
       )}
     </div>

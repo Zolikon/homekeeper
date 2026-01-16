@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { addInfoItem, isNameAvailable } from "../__backend/InfoService";
+import { MdAdd } from "react-icons/md";
 
 function translateValidationErrors(errorType: string) {
   switch (errorType) {
@@ -47,7 +48,7 @@ function AddInfoItem() {
         className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
         onClick={openDialog}
       >
-        <span className="material-symbols-outlined text-4xl">add</span>
+        <MdAdd size={24} />
       </button>
       <dialog ref={dialogRef} className="rounded-xl mt-10 w-[90%] h-[40%]">
         <form

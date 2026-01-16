@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import { deleteInfoItem, InfoItem } from "../__backend/InfoService";
 import CopyButton from "../__components/CopyButton";
+import { MdTouchApp, MdDelete } from "react-icons/md";
 
 function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -27,7 +28,7 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
         onClick={openDialog}
       >
         <h2>{infoItem.title}</h2>
-        <span className="material-symbols-outlined text-3xl">touch_app</span>
+        <MdTouchApp size={24} />
       </div>
       <dialog ref={dialogRef} className="w-[90vw] h-[40vh] rounded-xl">
         <div className="flex flex-col items-center justify-between p-2 h-full">
@@ -38,7 +39,7 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
               className="bg-red-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2 flex items-center justify-center"
               onClick={deleteItem}
             >
-              <span className="material-symbols-outlined text-3xl">delete</span>
+              <MdDelete size={24} />
             </button>
             <CopyButton text={infoItem.content} />
             <button

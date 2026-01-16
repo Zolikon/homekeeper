@@ -46,14 +46,16 @@ export async function counCompletedItems(): Promise<number> {
   return (await client.list()).data.length || 0;
 }
 
-export async function addItem(name: string, type?: ShoppingItemType): Promise<void> {
+export async function addItem(name: string, type?: ShoppingItemType): Promise<string> {
+  const newId = randomUUID();
   await client.create({
-    id: randomUUID(),
+    id: newId,
     name,
     added: new Date().getTime(),
     type: type || ShoppingItemType.FOOD,
   });
   revalidatePath("/shopping");
+  return newId;
 }
 
 export async function deleteItem(id: string): Promise<void> {

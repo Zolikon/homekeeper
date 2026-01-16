@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { useZooplusCart } from "./ZooplusContext";
 import CopyButton from "../__components/CopyButton";
+import { MdShoppingCart } from "react-icons/md";
 
 function FinalOrderButton() {
   const { cart } = useZooplusCart() ?? { cart: [] };
@@ -20,7 +21,7 @@ function FinalOrderButton() {
         onClick={openDialog}
         disabled={cart.length === 0}
       >
-        <span className="material-symbols-outlined text-4xl">shopping_cart</span>
+        <MdShoppingCart size={24} />
         {cart.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 text-xs size-6">
             {cart.length}
