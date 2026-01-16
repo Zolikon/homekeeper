@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { refreshContent } from "../__backend/ShoppingService";
+import { MdRefresh } from "react-icons/md";
 
 function RefreshButton() {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -25,13 +26,9 @@ function RefreshButton() {
       className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
     >
       {!isRefreshing ? (
-        <span className="material-symbols-outlined text-4xl" key="norefresh">
-          refresh
-        </span>
+        <MdRefresh size={24} key="norefresh" />
       ) : (
-        <span className="material-symbols-outlined text-4xl animate-spin" key="refresh">
-          refresh
-        </span>
+        <MdRefresh size={24} className="animate-spin" key="refresh" />
       )}
     </button>
   );

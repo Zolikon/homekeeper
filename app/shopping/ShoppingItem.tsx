@@ -5,6 +5,7 @@ import { deleteItem } from "../__backend/ShoppingService";
 import type { ShoppingItem } from "../__backend/shopping.types";
 import { useShopping } from "./ShoppingContext";
 import { ICON_MAP } from "./ItemTypeSelector";
+import { MdCancel, MdDelete, MdVisibilityOff } from "react-icons/md";
 
 function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
   const [removeInProgress, setRemoveInProgress] = useState(false);
@@ -29,9 +30,8 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
 
   return (
     <div
-      className={`flex items-center justify-between  ${
-        context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
-      } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[80px] min-h-[80px] px-5`}
+      className={`flex items-center justify-between  ${context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
+        } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[80px] min-h-[80px] px-5`}
     >
       <div className="flex gap-4 items-center w-[85%]">
         {ICON_MAP[type]}
@@ -45,16 +45,16 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
           context?.toBeDeleted === id ? (
             <div className="flex flex-col gap-2 items-center">
               <button onClick={cancelRemove}>
-                <span className="material-symbols-outlined text-2xl">cancel</span>
+                <MdCancel size={24} />
               </button>
               <button onClick={confirmRemove}>
-                <span className="material-symbols-outlined text-2xl">delete</span>
+                <MdDelete size={24} />
               </button>
             </div>
           ) : (
             <div className="flex flex-col gap-2 items-center">
               <button onClick={() => context?.hideElement(id)}>
-                <span className="material-symbols-outlined text-xl">visibility_off</span>
+                <MdVisibilityOff size={24} />
               </button>
               <input
                 className="size-6"

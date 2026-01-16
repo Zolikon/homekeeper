@@ -6,6 +6,7 @@ import { addItem } from "../__backend/ShoppingService";
 import { predifinedItems } from "./predefinedItems";
 import ItemTypeSelector, { ICON_MAP } from "./ItemTypeSelector";
 import { ShoppingItemType } from "../__backend/shopping.types";
+import { MdAdd } from "react-icons/md";
 
 function AddShoppingItem() {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -43,7 +44,7 @@ function AddShoppingItem() {
         className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
         onClick={openDialog}
       >
-        <span className="material-symbols-outlined text-4xl">add</span>
+        <MdAdd size={24} />
       </button>
       <dialog ref={dialogRef} className="rounded-xl mt-10">
         <div className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center">

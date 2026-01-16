@@ -1,5 +1,6 @@
 "use client";
 import { useShopping } from "./ShoppingContext";
+import { MdVisibility } from "react-icons/md";
 
 function ShowHiddenButton() {
   const context = useShopping();
@@ -10,7 +11,7 @@ function ShowHiddenButton() {
       disabled={context?.hiddenIds.length === 0}
       onClick={() => context?.resetHiddenElements()}
     >
-      <span className="material-symbols-outlined text-4xl">visibility</span>
+      <MdVisibility size={24} />
       {context?.hiddenIds && context?.hiddenIds.length > 0 && (
         <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 text-xs size-6">
           {context?.hiddenIds.length}

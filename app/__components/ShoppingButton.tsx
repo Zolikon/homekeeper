@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { MdCreditCard } from "react-icons/md";
+import { FaShoppingCart } from "react-icons/fa";
 
-function CardButton() {
+function ShoppingButton() {
   return (
     <Link
-      href="/cards"
+      href="/shopping"
       className="size-12 md:size-16 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg"
     >
-      <MdCreditCard size={24} />
+      <FaShoppingCart size={24} />
     </Link>
   );
 }
 
-export default CardButton;
+export default ShoppingButton;
