@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useZooplusCart } from "./ZooplusContext";
+import { MdAdd, MdClose } from "react-icons/md";
 
 function AddPetOrderItem() {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -12,7 +13,7 @@ function AddPetOrderItem() {
     reset,
     formState: { errors, isDirty, isSubmitting },
   } = useForm();
-  const { addToItems } = useZooplusCart() ?? { addItem: () => {} };
+  const { addToItems } = useZooplusCart() ?? { addItem: () => { } };
 
   function openDialog() {
     dialogRef.current?.showModal();
@@ -39,7 +40,7 @@ function AddPetOrderItem() {
         className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
         onClick={openDialog}
       >
-        <span className="material-symbols-outlined text-4xl">add</span>
+        <MdAdd size={24} />
       </button>
       <dialog ref={dialogRef} className="rounded-xl mt-10">
         <div className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center">
@@ -103,9 +104,7 @@ function AddPetOrderItem() {
           </form>
           {!isSubmitting && (
             <button className="absolute top-2 right-2" onClick={closeDialog}>
-              <span className="material-symbols-outlined text-4xl" onClick={closeDialog}>
-                close
-              </span>
+              <MdClose size={24} />
             </button>
           )}
         </div>

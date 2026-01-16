@@ -25,6 +25,7 @@ const schema = a.schema({
   Recipe: a
     .model({
       id: a.string().required(),
+      link: a.string(),
       name: a.string().required(),
       ingredients: a.string().array().required(),
     })

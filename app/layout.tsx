@@ -25,14 +25,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-screen bg-gradient-to-b from-background to-background-to flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-b from-background to-background-to flex flex-col`}
       >
-        <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="w-screen md:h-12" />
-        {children}
-        <footer className="fixed bottom-0 w-full bg-theme_primary text-white text-center p-2 flex gap-3 justify-end select-none">
-          <p>{`HomeKeeper ${process.env.VERSION}`}</p>
-          <p>|</p>
-          <p>{new Date().getUTCFullYear()}</p>
+        <header className="w-full bg-theme_primary text-white text-center h-[10%] flex gap-3 justify-center items-center select-none">
+          <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="object-contain" />
+        </header>
+        <main className="h-[85%]">
+          {children}
+        </main>
+        <footer className="w-full bg-theme_primary text-white text-center h-[5%] flex gap-3 justify-center items-center select-none">
+          <p className="text-xs">{`HomeKeeper ${process.env.VERSION}`}</p>
         </footer>
       </body>
     </html>

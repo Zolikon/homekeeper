@@ -5,7 +5,7 @@ import { deleteItem } from "../__backend/ShoppingService";
 import type { ShoppingItem } from "../__backend/shopping.types";
 import { useShopping } from "./ShoppingContext";
 import { ICON_MAP } from "./ItemTypeSelector";
-import { MdCancel, MdDelete, MdVisibilityOff } from "react-icons/md";
+import { MdAutorenew, MdCancel, MdDelete, MdDone, MdVisibilityOff } from "react-icons/md";
 
 function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
   const [removeInProgress, setRemoveInProgress] = useState(false);
@@ -66,10 +66,10 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
           )
         ) : (
           <div>
-            <span className="material-symbols-outlined animate-spin text-2xl">autorenew</span>
+            <MdAutorenew size={24} />
           </div>
         ))}
-      {context?.deletedIds.includes(id) && <span className="material-symbols-outlined">done</span>}
+      {context?.deletedIds.includes(id) && <MdDone size={24} />}
     </div>
   );
 }

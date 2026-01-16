@@ -6,6 +6,7 @@ import { Recipe } from "../__backend/recipe.types";
 import { updateRecipe, deleteRecipe } from "../__backend/RecipeService";
 import RecipeModal from "./RecipeModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 interface RecipeActionButtonsProps {
     recipe: Recipe;
@@ -44,14 +45,14 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
                 className="size-12 md:size-16 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
                 title="Delete Recipe"
             >
-                <span className="material-symbols-outlined text-3xl md:text-4xl">delete</span>
+                <MdDelete size={24} />
             </button>
             <button
                 onClick={() => setIsUpdateModalOpen(true)}
                 className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors"
                 title="Update Recipe"
             >
-                <span className="material-symbols-outlined text-3xl md:text-4xl">edit</span>
+                <MdEdit size={24} />
             </button>
 
 

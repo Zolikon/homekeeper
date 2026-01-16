@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { useShopping } from "./ShoppingContext";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
 interface Props {
   children: React.ReactNode;
@@ -42,7 +43,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
       {canScrollUp && (
         <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none z-10">
           <div className="bg-gradient-to-b from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center rounded-t-lg">
-            <span className="material-symbols-outlined text-gray-600">expand_less</span>
+            <MdExpandLess size={24} />
           </div>
         </div>
       )}
@@ -56,7 +57,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
       {canScrollDown && (
         <div className="absolute bottom-0 left-0 w-full flex justify-center pointer-events-none z-10">
           <div className="bg-gradient-to-t from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center rounded-b-lg">
-            <span className="material-symbols-outlined text-gray-600">expand_more</span>
+            <MdExpandMore size={24} />
           </div>
         </div>
       )}
