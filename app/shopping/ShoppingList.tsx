@@ -12,13 +12,16 @@ const ShoppingList: React.FC<{ items: ShoppingItem[] }> = ({ items }) => {
   const context = useShopping();
 
   function countItemTypes(): Record<ShoppingItemType, number> {
-    return items.reduce((acc, item) => {
-      if (context?.deletedIds.includes(item.id)) {
+    return items.reduce(
+      (acc, item) => {
+        if (context?.deletedIds.includes(item.id)) {
+          return acc;
+        }
+        acc[item.type] = (acc[item.type] || 0) + 1;
         return acc;
-      }
-      acc[item.type] = (acc[item.type] || 0) + 1;
-      return acc;
-    }, {} as Record<ShoppingItemType, number>);
+      },
+      {} as Record<ShoppingItemType, number>,
+    );
   }
 
   return (

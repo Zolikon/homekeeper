@@ -1,7 +1,6 @@
 "use server";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
-
 import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../../amplify/data/resource";
 import { Amplify } from "aws-amplify";
@@ -39,10 +38,6 @@ export async function getShoppingList(): Promise<ShoppingItem[]> {
 }
 
 export async function countPendingItems(): Promise<number> {
-  return (await client.list()).data.length || 0;
-}
-
-export async function counCompletedItems(): Promise<number> {
   return (await client.list()).data.length || 0;
 }
 

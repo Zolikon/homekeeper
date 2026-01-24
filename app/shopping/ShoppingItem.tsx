@@ -7,6 +7,8 @@ import { useShopping } from "./ShoppingContext";
 import { ICON_MAP } from "./ItemTypeSelector";
 import { MdAutorenew, MdCancel, MdDelete, MdDone, MdVisibilityOff } from "react-icons/md";
 
+const ICON_SIZE = 24;
+
 function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
   const [removeInProgress, setRemoveInProgress] = useState(false);
   const context = useShopping();
@@ -30,8 +32,9 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
 
   return (
     <div
-      className={`flex items-center justify-between  ${context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
-        } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[80px] min-h-[80px] px-5`}
+      className={`flex items-center justify-between  ${
+        context?.toBeDeleted === id ? "bg-red-400" : "bg-gray-500"
+      } rounded-lg p-2 w-[95%] md:w-[40%] my-2 transition-all duration-500 h-[80px] min-h-[80px] px-5`}
     >
       <div className="flex gap-4 items-center w-[85%]">
         {ICON_MAP[type]}
@@ -45,16 +48,16 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
           context?.toBeDeleted === id ? (
             <div className="flex flex-col gap-2 items-center">
               <button onClick={cancelRemove}>
-                <MdCancel size={24} />
+                <MdCancel size={ICON_SIZE} />
               </button>
               <button onClick={confirmRemove}>
-                <MdDelete size={24} />
+                <MdDelete size={ICON_SIZE} />
               </button>
             </div>
           ) : (
             <div className="flex flex-col gap-2 items-center">
               <button onClick={() => context?.hideElement(id)}>
-                <MdVisibilityOff size={24} />
+                <MdVisibilityOff size={ICON_SIZE} />
               </button>
               <input
                 className="size-6"
@@ -65,11 +68,11 @@ function ShoppingItemComponent({ id, type, name, added }: ShoppingItem) {
             </div>
           )
         ) : (
-          <div>
-            <MdAutorenew size={24} />
+          <div className="flex items-center justify-center animate-spin">
+            <MdAutorenew size={ICON_SIZE} />
           </div>
         ))}
-      {context?.deletedIds.includes(id) && <MdDone size={24} />}
+      {context?.deletedIds.includes(id) && <MdDone size={ICON_SIZE} />}
     </div>
   );
 }
