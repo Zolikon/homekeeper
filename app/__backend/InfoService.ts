@@ -1,13 +1,15 @@
 "use server";
 import { revalidatePath } from "next/cache";
-
-import { generateClient } from "aws-amplify/data";
+import { cookies } from "next/headers";
+import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/data";
 import type { Schema } from "../../amplify/data/resource";
-import { Amplify } from "aws-amplify";
 import outputs from "../../amplify_outputs.json";
 
-Amplify.configure(outputs);
-const client = generateClient<Schema>().models.InfoStore;
+const cookieClient = generateServerClientUsingCookies<Schema>({
+  cookies,
+  config: outputs,
+});
+const client = cookieClient.models.InfoStore;
 
 export type InfoItem = {
   id: string;

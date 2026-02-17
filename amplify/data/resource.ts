@@ -14,14 +14,14 @@ const schema = a.schema({
       type: a.string().required(),
       added: a.timestamp().required(),
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization((allow) => [allow.authenticated()]),
   InfoStore: a
     .model({
       id: a.string().required(),
       title: a.string().required(),
       content: a.string().required(),
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization((allow) => [allow.authenticated()]),
   Recipe: a
     .model({
       id: a.string().required(),
@@ -29,7 +29,7 @@ const schema = a.schema({
       name: a.string().required(),
       ingredients: a.string().array().required(),
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -37,7 +37,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "iam",
+    defaultAuthorizationMode: "userPool",
   },
 });
 

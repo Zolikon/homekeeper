@@ -1,23 +1,23 @@
 "use server";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
-
-import { generateClient } from "aws-amplify/data";
+import { cookies } from "next/headers";
+import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/data";
 import type { Schema } from "../../amplify/data/resource";
-import { Amplify } from "aws-amplify";
 import outputs from "../../amplify_outputs.json";
 import { Recipe } from "./recipe.types";
 import { normalizeString } from "./utils";
 
-Amplify.configure(outputs);
-const client = generateClient<Schema>().models.Recipe;
+const cookieClient = generateServerClientUsingCookies<Schema>({
+  cookies,
+  config: outputs,
+});
+const client = cookieClient.models.Recipe;
 
 export type RecipeFilter = {
     name?: string;
     ingredients?: string;
 };
-
-
 
 export async function listRecipes(filter?: RecipeFilter): Promise<Recipe[]> {
     const { data } = await client.list();
