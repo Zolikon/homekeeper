@@ -15,10 +15,6 @@ cfnUserPool.adminCreateUserConfig = {
   allowAdminCreateUserOnly: true,
 };
 
-// Override: use username-based sign-in instead of email
-// (Amplify sets UsernameAttributes: ['email'] by default — remove it)
-cfnUserPool.addPropertyDeletionOverride("UsernameAttributes");
-
 // Sandbox-only: relaxed password policy and seed user
 const isSandbox = !process.env.AWS_BRANCH;
 
@@ -42,7 +38,7 @@ if (isSandbox) {
       action: "adminCreateUser",
       parameters: {
         UserPoolId: userPool.userPoolId,
-        Username: "zoli",
+        Username: "zoli@example.com",
         TemporaryPassword: "test11",
         MessageAction: "SUPPRESS",
         UserAttributes: [
@@ -57,7 +53,7 @@ if (isSandbox) {
       action: "adminDeleteUser",
       parameters: {
         UserPoolId: userPool.userPoolId,
-        Username: "zoli",
+        Username: "zoli@example.com",
       },
     },
     policy: {
@@ -77,7 +73,7 @@ if (isSandbox) {
       action: "adminSetUserPassword",
       parameters: {
         UserPoolId: userPool.userPoolId,
-        Username: "zoli",
+        Username: "zoli@example.com",
         Password: "test11",
         Permanent: true,
       },

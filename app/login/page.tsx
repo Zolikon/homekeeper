@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [needsNewPassword, setNeedsNewPassword] = useState(false);
@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const result = await signIn({ username, password });
+      const result = await signIn({ username: email, password });
 
       if (result.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED") {
         setNeedsNewPassword(true);
@@ -62,12 +62,12 @@ export default function LoginPage() {
         {!needsNewPassword ? (
           <form onSubmit={handleSignIn} className="flex flex-col gap-4">
             <input
-              type="text"
-              placeholder="Felhasználónév"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email cím"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              autoComplete="username"
+              autoComplete="email"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-theme_primary"
             />
             <input
