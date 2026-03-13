@@ -30,6 +30,53 @@ const schema = a.schema({
       ingredients: a.string().array().required(),
     })
     .authorization((allow) => [allow.authenticated()]),
+
+  VacationInfo: a
+    .model({
+      id: a.string().required(), // always "main" — singleton
+      city: a.string().required(),
+      hotelName: a.string().required(),
+      hotelAddress: a.string(),
+      hotelCheckIn: a.string(), // "YYYY-MM-DD"
+      hotelCheckOut: a.string(), // "YYYY-MM-DD"
+      hotelNotes: a.string(),
+      weatherLat: a.float(), // geocoded latitude — cached to avoid re-geocoding on force-dynamic pages
+      weatherLon: a.float(), // geocoded longitude
+    })
+    .authorization((allow) => [allow.authenticated()]),
+
+  VacationFlight: a
+    .model({
+      id: a.string().required(), // "outbound" or "return" — deterministic
+      flightNumber: a.string(),
+      airline: a.string(),
+      departureTime: a.string().required(), // "YYYY-MM-DD HH:mm"
+      departureTerminal: a.string(), // optional — budget airlines assign terminals late
+      arrivalTime: a.string().required(), // "YYYY-MM-DD HH:mm"
+      arrivalTerminal: a.string(), // optional
+      baggageInfo: a.string(),
+    })
+    .authorization((allow) => [allow.authenticated()]),
+
+  VacationDay: a
+    .model({
+      id: a.string().required(),
+      date: a.string().required(), // "YYYY-MM-DD"
+      order: a.integer().required(),
+    })
+    .authorization((allow) => [allow.authenticated()]),
+
+  VacationProgram: a
+    .model({
+      id: a.string().required(),
+      dayId: a.string().required(),
+      name: a.string().required(),
+      startTime: a.string().required(), // "HH:mm" — programs sorted by this field
+      endTime: a.string(), // "HH:mm" — optional
+      address: a.string(),
+      notes: a.string(),
+    })
+    .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
