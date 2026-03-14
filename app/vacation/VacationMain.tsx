@@ -19,7 +19,7 @@ export default function VacationMain({ info, weather, outboundFlight, returnFlig
   const [hotelModalOpen, setHotelModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
+    <div className="h-full overflow-y-auto flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">{info.city}</h1>
@@ -76,7 +76,7 @@ export default function VacationMain({ info, weather, outboundFlight, returnFlig
       </div>
 
       {/* Delete section */}
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
         <DeleteVacationButton />
       </div>
 
