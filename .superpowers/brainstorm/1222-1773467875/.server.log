@@ -1,0 +1,3 @@
+{"type":"server-started","port":63429,"host":"0.0.0.0","url_host":"localhost","url":"http://localhost:63429","screen_dir":"C:/dev/homekeeper/.superpowers/brainstorm/1222-1773467875"}
+{"type":"screen-added","file":"C:\\dev\\homekeeper\\.superpowers\\brainstorm\\1222-1773467875\\timeline-mockup.html"}
+{"type":"server-stopped","reason":"owner process exited"}

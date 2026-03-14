@@ -14,13 +14,18 @@ type FormValues = {
 
 export default function CreateVacationForm() {
   const router = useRouter();
-  const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<FormValues>();
+  const { register, handleSubmit, formState: { isSubmitting, errors }, setError } = useForm<FormValues>();
 
   const onSubmit = async (values: FormValues) => {
-    await createVacation(values.city, values.hotelName, values.startDate, values.endDate);
-    // Geocode in background after creation so weather works on next page load
-    await geocodeAndStore(values.city);
-    router.refresh();
+    try {
+      await createVacation(values.city, values.hotelName, values.startDate, values.endDate);
+      // Geocode in background after creation so weather works on next page load
+      await geocodeAndStore(values.city);
+      router.refresh();
+    } catch (err) {
+      setError("root", { message: "Hiba történt a mentés során. Kérjük, próbáld újra." });
+      console.error(err);
+    }
   };
 
   return (
@@ -67,6 +72,10 @@ export default function CreateVacationForm() {
           {errors.endDate && <span className="text-red-500 text-xs">{errors.endDate.message}</span>}
         </div>
       </div>
+
+      {errors.root && (
+        <p className="text-red-500 text-sm text-center">{errors.root.message}</p>
+      )}
 
       <button
         type="submit"

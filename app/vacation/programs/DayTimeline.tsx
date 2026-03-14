@@ -160,7 +160,7 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       ) : (
         // Flex row: [time labels | events]
         // Both columns share the same totalHeight so grid lines and labels align.
-        <div className="flex pb-20" style={{ minHeight: totalHeight }}>
+        <div className="flex pt-4 pb-20" style={{ minHeight: totalHeight }}>
 
           {/* Left column: hour labels */}
           <div className="relative shrink-0" style={{ width: LABEL_COL_W, height: totalHeight }}>

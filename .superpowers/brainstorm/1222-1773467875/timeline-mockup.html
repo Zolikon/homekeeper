@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline Layout Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f3f4f6;
+    padding: 24px;
+    color: #111;
+  }
+  h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #6b7280; font-size: 0.875rem; margin-bottom: 24px; }
+
+  .phone {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    max-width: 390px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .phone-header {
+    background: #fff;
+    padding: 16px 16px 8px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .back-btn {
+    width: 32px; height: 32px;
+    background: #f3f4f6;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: #374151;
+  }
+  .day-label { font-weight: 700; font-size: 1rem; }
+  .date-label { font-size: 0.75rem; color: #9ca3af; }
+  .day-nav {
+    display: flex; gap: 8px;
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid #f3f4f6;
+    overflow-x: auto;
+  }
+  .day-pill {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #f3f4f6;
+    color: #6b7280;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .day-pill.active {
+    background: rgb(29,181,147);
+    color: #fff;
+  }
+
+  /* Timeline */
+  .timeline-scroll {
+    overflow-y: auto;
+    max-height: 520px;
+    background: #f9fafb;
+  }
+  .timeline-inner {
+    position: relative;
+    display: flex;
+    padding: 0;
+  }
+  .time-col {
+    width: 44px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .hour-label {
+    position: absolute;
+    left: 0;
+    width: 44px;
+    text-align: right;
+    padding-right: 8px;
+    font-size: 0.65rem;
+    color: #9ca3af;
+    font-weight: 500;
+    transform: translateY(-50%);
+    line-height: 1;
+    user-select: none;
+  }
+  .events-col {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+  }
+  .grid-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: #e5e7eb;
+  }
+  .grid-line.half {
+    background: #f3f4f6;
+    height: 1px;
+    border-top: 1px dashed #e5e7eb;
+    background: transparent;
+  }
+
+  /* Current time indicator */
+  .now-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: rgb(239,68,68);
+    z-index: 5;
+  }
+  .now-dot {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgb(239,68,68);
+  }
+  .now-label {
+    position: absolute;
+    right: 4px;
+    top: -9px;
+    font-size: 0.6rem;
+    color: rgb(239,68,68);
+    font-weight: 700;
+  }
+
+  /* Events */
+  .event {
+    position: absolute;
+    border-radius: 10px;
+    padding: 6px 8px;
+    border: 1px solid;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    z-index: 2;
+  }
+  .event:active { opacity: 0.8; }
+  .event-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .event-time {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    margin-top: 1px;
+  }
+  .event-active-badge {
+    display: inline-block;
+    background: rgb(29,181,147);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 1px 5px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  .event.normal {
+    background: #fff;
+    border-color: #e5e7eb;
+    color: #111;
+  }
+  .event.active {
+    background: rgba(29,181,147,0.12);
+    border-color: rgb(29,181,147);
+    color: #111;
+  }
+  .event.past {
+    background: #f9fafb;
+    border-color: #f3f4f6;
+    color: #9ca3af;
+    opacity: 0.65;
+  }
+  .event.flight {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+  }
+  .event.flight .event-name { color: #1d4ed8; }
+  .event-icon {
+    font-size: 0.7rem;
+    margin-right: 3px;
+    vertical-align: middle;
+  }
+
+  /* FAB */
+  .fab-area {
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+    background: #fff;
+    border-top: 1px solid #f3f4f6;
+  }
+  .fab {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgb(29,181,147);
+    color: #fff;
+    font-size: 24px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(29,181,147,0.4);
+    cursor: pointer;
+  }
+
+  /* Legend */
+  .legend {
+    max-width: 390px;
+    margin: 20px auto 0;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .legend h3 { font-size: 0.875rem; font-weight: 700; margin-bottom: 12px; color: #374151; }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: #374151;
+  }
+  .legend-swatch {
+    width: 32px; height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    border: 1px solid;
+  }
+</style>
+</head>
+<body>
+
+<h2>Timeline Layout Mockup</h2>
+<p class="subtitle">Proportional time scale · 60px/hour · overlapping events side-by-side · scroll to current time on "today"</p>
+
+<div class="phone">
+  <div class="phone-header">
+    <div class="back-btn">‹</div>
+    <div>
+      <div class="day-label">Napi programok</div>
+    </div>
+  </div>
+  <div class="day-nav">
+    <div class="day-pill">Máj 10</div>
+    <div class="day-pill active">Máj 11 · Ma</div>
+    <div class="day-pill">Máj 12</div>
+    <div class="day-pill">Máj 13</div>
+    <div class="day-pill">Máj 14</div>
+  </div>
+
+  <div class="timeline-scroll" id="timelineScroll">
+    <div class="timeline-inner" id="timelineInner" style="padding-bottom: 24px;">
+      <!-- Time column -->
+      <div class="time-col" id="timeCol"></div>
+      <!-- Events column -->
+      <div class="events-col" id="eventsCol">
+        <!-- grid lines injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="fab-area">
+    <div class="fab">+</div>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Key design decisions</h3>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#fff;border-color:#e5e7eb;"></div>
+    <div><strong>Future events</strong> — full opacity, white background</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:rgba(29,181,147,0.12);border-color:rgb(29,181,147);"></div>
+    <div><strong>Active event</strong> — teal border, highlighted, "Most" badge inside</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#f9fafb;border-color:#f3f4f6;opacity:0.65;"></div>
+    <div><strong>Past events</strong> — dimmed out, reduced opacity</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#eff6ff;border-color:#bfdbfe;"></div>
+    <div><strong>Flight card</strong> — blue tint, links to flight page on tap</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:rgb(239,68,68);border-color:rgb(239,68,68);"></div>
+    <div><strong>Red line</strong> — current time indicator, timeline auto-scrolls here on "today"</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:#f3f4f6;border-color:#d1d5db;"></div>
+    <div><strong>No endTime</strong> — min-height = 30 min (displayed with bottom dashed border to indicate open-ended)</div>
+  </div>
+</div>
+
+<script>
+// Config
+const PX_PER_HOUR = 72;
+const PX_PER_MIN = PX_PER_HOUR / 60;
+const DAY_START = 7; // first visible hour
+const DAY_END = 23;  // last visible hour
+
+function toMin(timeStr) {
+  const [h, m] = timeStr.split(':').map(Number);
+  return h * 60 + m;
+}
+function topPx(timeStr) {
+  return (toMin(timeStr) - DAY_START * 60) * PX_PER_MIN;
+}
+function heightPx(startStr, endStr) {
+  if (!endStr) return PX_PER_HOUR * 0.5; // 30-min default
+  const diff = toMin(endStr) - toMin(startStr);
+  return Math.max(diff * PX_PER_MIN, 28); // min 28px
+}
+
+const totalHours = DAY_END - DAY_START;
+const totalHeight = totalHours * PX_PER_HOUR;
+
+// Build time column + grid lines
+const timeCol = document.getElementById('timeCol');
+const eventsCol = document.getElementById('eventsCol');
+timeCol.style.height = totalHeight + 'px';
+eventsCol.style.height = totalHeight + 'px';
+
+for (let h = DAY_START; h <= DAY_END; h++) {
+  const top = (h - DAY_START) * PX_PER_HOUR;
+  // Hour label
+  const lbl = document.createElement('div');
+  lbl.className = 'hour-label';
+  lbl.style.top = top + 'px';
+  lbl.textContent = h + ':00';
+  timeCol.appendChild(lbl);
+  // Grid line
+  const line = document.createElement('div');
+  line.className = 'grid-line';
+  line.style.top = top + 'px';
+  eventsCol.appendChild(line);
+  // Half-hour dashed line
+  if (h < DAY_END) {
+    const halfLine = document.createElement('div');
+    halfLine.className = 'grid-line half';
+    halfLine.style.top = (top + PX_PER_HOUR / 2) + 'px';
+    eventsCol.appendChild(halfLine);
+  }
+}
+
+// Sample events
+const events = [
+  // Past
+  { start: '08:30', end: '09:00', label: 'Reggeli', type: 'past' },
+  { start: '09:15', end: '10:45', label: '→ Reptér transzfer', type: 'flight', icon: '✈' },
+  // Overlapping with flight
+  { start: '09:30', end: '10:00', label: 'Check-out hotel', type: 'past' },
+  // Active
+  { start: '11:00', end: '12:30', label: 'Városnézés', type: 'active' },
+  // No end time — open-ended
+  { start: '13:00', end: null, label: 'Ebédszünet', type: 'normal', openEnded: true },
+  // Future normal
+  { start: '14:00', end: '16:00', label: 'Múzeum látogatás', type: 'normal' },
+  // Overlapping pair
+  { start: '16:00', end: '18:00', label: 'Hajókirándulás', type: 'normal' },
+  { start: '16:30', end: '17:30', label: 'Snorkeling', type: 'normal' },
+  // Evening
+  { start: '19:30', end: '21:30', label: 'Vacsora', type: 'normal' },
+];
+
+// Overlap detection — assign column indices
+function assignColumns(events) {
+  const sorted = [...events].sort((a, b) => toMin(a.start) - toMin(b.start));
+  const cols = []; // cols[i] = end time of last event in column i
+  const result = sorted.map(ev => {
+    const startMin = toMin(ev.start);
+    const endMin = ev.end ? toMin(ev.end) : startMin + 30;
+    let col = cols.findIndex(endCol => endCol <= startMin);
+    if (col === -1) col = cols.length;
+    cols[col] = endMin;
+    return { ...ev, col };
+  });
+  // Total columns needed
+  const maxCol = Math.max(...result.map(e => e.col)) + 1;
+  return { events: result, maxCol };
+}
+
+const { events: laidOut, maxCol } = assignColumns(events);
+
+const PADDING = 6;
+
+laidOut.forEach(ev => {
+  const el = document.createElement('div');
+  el.className = 'event ' + ev.type;
+  const top = topPx(ev.start);
+  const height = heightPx(ev.start, ev.end);
+  const colWidth = (100 / maxCol);
+  const left = `calc(${ev.col * colWidth}% + ${PADDING}px)`;
+  const width = `calc(${colWidth}% - ${PADDING * 2}px)`;
+  el.style.top = top + 'px';
+  el.style.height = height + 'px';
+  el.style.left = left;
+  el.style.width = width;
+  if (ev.openEnded) {
+    el.style.borderBottomStyle = 'dashed';
+  }
+
+  el.innerHTML = `
+    <div class="event-name">
+      ${ev.icon ? `<span class="event-icon">${ev.icon}</span>` : ''}
+      ${ev.label}
+      ${ev.type === 'active' ? '<span class="event-active-badge">Most</span>' : ''}
+    </div>
+    <div class="event-time">${ev.start}${ev.end ? ' – ' + ev.end : ''}</div>
+  `;
+  eventsCol.appendChild(el);
+});
+
+// Current time line — simulated at 11:40
+const NOW_TIME = '11:40';
+const nowTop = topPx(NOW_TIME);
+const nowLine = document.createElement('div');
+nowLine.className = 'now-line';
+nowLine.style.top = nowTop + 'px';
+nowLine.innerHTML = '<div class="now-dot"></div><div class="now-label">Most</div>';
+eventsCol.appendChild(nowLine);
+
+// Scroll to current time (centered)
+const scroll = document.getElementById('timelineScroll');
+const scrollTarget = nowTop - scroll.clientHeight / 2 + 60;
+setTimeout(() => {
+  scroll.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+}, 300);
+</script>
+</body>
+</html>
