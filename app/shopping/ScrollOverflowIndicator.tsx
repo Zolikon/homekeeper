@@ -39,7 +39,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
   }, [children, hiddenIds]);
 
   return (
-    <div className="relative w-[90%] h-full flex-col items-center justify-center">
+    <div className="relative w-[90%] flex-1 min-h-0 flex flex-col">
       {canScrollUp && (
         <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none z-10">
           <div className="bg-gradient-to-b from-gray-300/80 to-transparent w-full h-6 flex items-center justify-center rounded-t-lg">
@@ -49,7 +49,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
       )}
       <div
         ref={containerRef}
-        className="w-full flex flex-col items-center h-[60vh] md:h-[80vh] overflow-y-auto gap-2"
+        className="w-full flex flex-col items-center flex-1 min-h-0 overflow-y-auto gap-2"
         style={{ scrollbarWidth: "thin" }}
       >
         {children}

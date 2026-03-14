@@ -61,7 +61,7 @@ export default function ProgramsView({ initialDays, startDate, endDate, outbound
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* Day selector tabs */}
-      <div className="flex gap-2 px-4 pb-2 overflow-x-auto shrink-0 scrollbar-hide">
+      <div className="flex gap-2 px-4 py-2 overflow-x-auto shrink-0 scrollbar-hide">
         {days.map((day) => (
           <button
             key={day.id}
@@ -76,16 +76,6 @@ export default function ProgramsView({ initialDays, startDate, endDate, outbound
           </button>
         ))}
       </div>
-
-      {/* Selected day date */}
-      {selectedDay && (
-        <p className="text-sm text-gray-500 px-4 pb-2 shrink-0">
-          {selectedDay.date === today && (
-            <span className="text-theme_primary font-semibold">● Ma · </span>
-          )}
-          {selectedDay.date}
-        </p>
-      )}
 
       {/* Timeline */}
       {selectedDayId && !loadingPrograms ? (

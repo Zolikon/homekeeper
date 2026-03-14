@@ -4,7 +4,7 @@ export const PanelButton = ({ children, link }: { children: React.ReactNode; lin
   return (
     <Link
       href={link}
-      className="bg-theme_primary  p-2 rounded-lg w-full h-1/2 text-center flex gap-2 items-center justify-between"
+      className="bg-theme_primary p-2 rounded-lg w-full h-16 text-center flex gap-2 items-center justify-between"
     >
       {children}
     </Link>

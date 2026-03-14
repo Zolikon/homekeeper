@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { deleteProgram } from "@/app/__backend/VacationService";
 import type { VacationProgram } from "@/app/__backend/vacation.types";
 import ProgramModal from "./ProgramModal";
+import ProgramDetailModal from "./ProgramDetailModal";
 import MenuHolder from "@/app/__components/MenuHolder";
 import { PiMapPin, PiPlus, PiPencil, PiTrash, PiAirplaneTakeoff } from "react-icons/pi";
 import Link from "next/link";
@@ -86,9 +87,11 @@ function assignColumns(items: TimelineItem[]): LaidOutItem[] {
 }
 
 export default function DayTimeline({ dayId, programs, isToday, onProgramsChange, flightCard }: Props) {
-  const [addModalOpen, setAddModalOpen]     = useState(false);
-  const [editingProgram, setEditingProgram] = useState<VacationProgram | null>(null);
-  const [currentMinutes, setCurrentMinutes] = useState(nowMinutes());
+  const [addModalOpen, setAddModalOpen]       = useState(false);
+  const [editingProgram, setEditingProgram]   = useState<VacationProgram | null>(null);
+  const [detailProgram, setDetailProgram]     = useState<VacationProgram | null>(null);
+  const [initialStartTime, setInitialStartTime] = useState<string | undefined>(undefined);
+  const [currentMinutes, setCurrentMinutes]   = useState(nowMinutes());
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,6 +152,15 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
     }
   };
 
+  const handleGridClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    const min = Math.round((e.nativeEvent.offsetY / PX_PER_MIN + startHour * 60) / 15) * 15;
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    setInitialStartTime(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+    setAddModalOpen(true);
+  };
+
   return (
     // min-h-0 is required so the flex-1 item can shrink below its content height,
     // allowing overflow-y-auto to create a scrollable region instead of expanding forever.
@@ -176,10 +188,10 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
           </div>
 
           {/* Right column: grid + events */}
-          <div className="relative flex-1" style={{ height: totalHeight }}>
-            {/* Grid lines */}
+          <div className="relative flex-1" style={{ height: totalHeight }} onClick={handleGridClick}>
+            {/* Grid lines — pointer-events-none so clicks pass through to the grid div */}
             {hours.map(h => (
-              <div key={h}>
+              <div key={h} className="pointer-events-none">
                 <div
                   className="absolute left-0 right-2 border-t border-gray-200 dark:border-gray-700"
                   style={{ top: (h - startHour) * PX_PER_HOUR }}
@@ -215,7 +227,6 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
               const colW      = 100 / item.totalCols;
               const left      = `calc(${item.col * colW}% + ${EVENT_GAP}px)`;
               const width     = `calc(${colW}% - ${EVENT_GAP + 8}px)`; // 8px right margin
-              const tall      = height > 52;
 
               if (item.type === "program") {
                 const program = item.data;
@@ -236,47 +247,49 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
                   >
                     <div className="flex items-start h-full p-1.5 gap-1">
                       <div className="min-w-0 flex-1 overflow-hidden">
+                        {/* Title row: name + active badge + map pin */}
                         <div className="flex items-center gap-1 flex-wrap">
-                          <p className="text-xs font-semibold leading-tight truncate">{program.name}</p>
+                          <button
+                            onClick={() => setDetailProgram(program)}
+                            className="text-xs font-semibold leading-tight truncate text-left hover:underline"
+                          >
+                            {program.name}
+                          </button>
                           {isActive && (
                             <span className="text-[10px] bg-theme_primary text-white rounded-full px-1.5 py-0.5 font-semibold shrink-0">
                               Most
                             </span>
                           )}
+                          {program.address && (
+                            <a
+                              href={`https://maps.google.com/?q=${encodeURIComponent(program.address)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={e => e.stopPropagation()}
+                              className="text-theme_primary shrink-0"
+                              title={program.address}
+                            >
+                              <PiMapPin className="text-xs" />
+                            </a>
+                          )}
                         </div>
                         <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
                           {program.startTime}{program.endTime ? ` – ${program.endTime}` : ""}
                         </p>
-                        {tall && program.address && (
-                          <a
-                            href={`https://maps.google.com/?q=${encodeURIComponent(program.address)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-0.5 text-[10px] text-theme_primary mt-0.5"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            <PiMapPin className="shrink-0" />
-                            <span className="underline truncate">{program.address}</span>
-                          </a>
-                        )}
-                        {tall && program.notes && (
-                          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight line-clamp-2">
-                            {program.notes}
-                          </p>
-                        )}
                       </div>
-                      <div className="flex flex-col gap-0.5 shrink-0">
+                      {/* Edit + Delete side-by-side */}
+                      <div className="flex flex-row gap-0.5 shrink-0">
                         <button
                           onClick={() => setEditingProgram(program)}
-                          className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="p-1 md:p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
-                          <PiPencil className="text-xs text-gray-500" />
+                          <PiPencil className="text-xs md:text-sm text-gray-500" />
                         </button>
                         <button
                           onClick={() => handleDelete(program.id)}
-                          className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-950"
+                          className="p-1 md:p-2 rounded hover:bg-red-50 dark:hover:bg-red-950"
                         >
-                          <PiTrash className="text-xs text-red-500" />
+                          <PiTrash className="text-xs md:text-sm text-red-500" />
                         </button>
                       </div>
                     </div>
@@ -313,7 +326,7 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
                         <p className="text-[10px] text-blue-600/70 dark:text-blue-400/70 leading-tight">
                           {fc.startTime}{fc.endTime ? ` – ${fc.endTime}` : ""}
                         </p>
-                        {tall && (fc.airline || fc.flightNumber) && (
+                        {(fc.airline || fc.flightNumber) && (
                           <p className="text-[10px] text-blue-500/60 leading-tight">
                             {[fc.airline, fc.flightNumber].filter(Boolean).join(" · ")}
                           </p>
@@ -331,7 +344,7 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       {/* FAB */}
       <MenuHolder>
         <button
-          onClick={() => setAddModalOpen(true)}
+          onClick={() => { setInitialStartTime(undefined); setAddModalOpen(true); }}
           className="size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center"
         >
           <PiPlus className="text-2xl" />
@@ -339,10 +352,23 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       </MenuHolder>
 
       {addModalOpen && (
-        <ProgramModal dayId={dayId} program={null} onSaved={handleSaved} onClose={() => setAddModalOpen(false)} />
+        <ProgramModal
+          dayId={dayId}
+          program={null}
+          onSaved={handleSaved}
+          onClose={() => { setAddModalOpen(false); setInitialStartTime(undefined); }}
+          initialStartTime={initialStartTime}
+        />
       )}
       {editingProgram && (
         <ProgramModal dayId={dayId} program={editingProgram} onSaved={handleSaved} onClose={() => setEditingProgram(null)} />
+      )}
+      {detailProgram && (
+        <ProgramDetailModal
+          program={detailProgram}
+          onClose={() => setDetailProgram(null)}
+          onEdit={() => { setEditingProgram(detailProgram); setDetailProgram(null); }}
+        />
       )}
     </div>
   );
