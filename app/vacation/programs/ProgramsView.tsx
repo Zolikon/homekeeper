@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { getProgramsForDay } from "@/app/__backend/VacationService";
-import type { VacationDay, VacationProgram } from "@/app/__backend/vacation.types";
+import type { VacationDay, VacationProgram, VacationFlight } from "@/app/__backend/vacation.types";
 import DayTimeline from "./DayTimeline";
 
 type Props = {
   initialDays: VacationDay[];
+  startDate: string;
+  endDate: string;
+  outboundFlight: VacationFlight | null;
+  returnFlight: VacationFlight | null;
 };
 
 function getTodayDate(): string {
@@ -22,7 +26,7 @@ function formatDayLabel(date: string): string {
   }
 }
 
-export default function ProgramsView({ initialDays }: Props) {
+export default function ProgramsView({ initialDays, startDate, endDate, outboundFlight, returnFlight }: Props) {
   const days = initialDays;
   const [selectedDayId, setSelectedDayId] = useState<string | null>(() => {
     const today = getTodayDate();
@@ -46,6 +50,13 @@ export default function ProgramsView({ initialDays }: Props) {
 
   const today = getTodayDate();
   const selectedDay = days.find((d) => d.id === selectedDayId);
+
+  const flightForSelectedDay: VacationFlight | null =
+    selectedDay?.date === startDate ? outboundFlight :
+    selectedDay?.date === endDate ? returnFlight :
+    null;
+
+  const flightHref = selectedDay?.date === startDate ? "/vacation/flight-out" : "/vacation/flight-back";
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
@@ -83,6 +94,14 @@ export default function ProgramsView({ initialDays }: Props) {
           programs={programs}
           isToday={selectedDay?.date === today}
           onProgramsChange={setPrograms}
+          flightCard={flightForSelectedDay ? {
+            label: selectedDay?.date === startDate ? "Oda repülés" : "Vissza repülés",
+            startTime: flightForSelectedDay.departureTime,
+            endTime: flightForSelectedDay.arrivalTime,
+            flightNumber: flightForSelectedDay.flightNumber,
+            airline: flightForSelectedDay.airline,
+            href: flightHref,
+          } : null}
         />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-400">

@@ -50,9 +50,9 @@ const schema = a.schema({
       id: a.string().required(), // "outbound" or "return" — deterministic
       flightNumber: a.string(),
       airline: a.string(),
-      departureTime: a.string().required(), // "YYYY-MM-DD HH:mm"
+      departureTime: a.string().required(), // "HH:mm"
       departureTerminal: a.string(), // optional — budget airlines assign terminals late
-      arrivalTime: a.string().required(), // "YYYY-MM-DD HH:mm"
+      arrivalTime: a.string().required(), // "HH:mm"
       arrivalTerminal: a.string(), // optional
       baggageInfo: a.string(),
     })

@@ -5,13 +5,24 @@ import { deleteProgram } from "@/app/__backend/VacationService";
 import type { VacationProgram } from "@/app/__backend/vacation.types";
 import ProgramModal from "./ProgramModal";
 import MenuHolder from "@/app/__components/MenuHolder";
-import { PiMapPin, PiPlus, PiPencil, PiTrash } from "react-icons/pi";
+import { PiMapPin, PiPlus, PiPencil, PiTrash, PiAirplaneTakeoff } from "react-icons/pi";
+import Link from "next/link";
+
+type FlightCard = {
+  label: string;
+  startTime: string;
+  endTime?: string;
+  flightNumber?: string;
+  airline?: string;
+  href: string;
+};
 
 type Props = {
   dayId: string;
   programs: VacationProgram[];
   isToday: boolean;
   onProgramsChange: (programs: VacationProgram[]) => void;
+  flightCard?: FlightCard | null;
 };
 
 function timeToMinutes(time: string): number {
@@ -24,7 +35,11 @@ function nowMinutes(): number {
   return now.getHours() * 60 + now.getMinutes();
 }
 
-export default function DayTimeline({ dayId, programs, isToday, onProgramsChange }: Props) {
+type TimelineItem =
+  | { type: "program"; id: string; startTime: string; data: VacationProgram }
+  | { type: "flight"; id: string; startTime: string; data: FlightCard };
+
+export default function DayTimeline({ dayId, programs, isToday, onProgramsChange, flightCard }: Props) {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editingProgram, setEditingProgram] = useState<VacationProgram | null>(null);
   const [currentMinutes, setCurrentMinutes] = useState(nowMinutes());
@@ -50,9 +65,14 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
     }
   };
 
+  const items: TimelineItem[] = [
+    ...programs.map((p) => ({ type: "program" as const, id: p.id, startTime: p.startTime, data: p })),
+    ...(flightCard ? [{ type: "flight" as const, id: "__flight__", startTime: flightCard.startTime, data: flightCard }] : []),
+  ].sort((a, b) => a.startTime.localeCompare(b.startTime));
+
   return (
     <div className="flex-1 overflow-y-auto px-4 pb-24 relative">
-      {programs.length === 0 ? (
+      {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-40 text-gray-400 text-sm">
           Még nincs program ezen a napon.
         </div>
@@ -61,71 +81,124 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
           {/* Vertical line */}
           <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
 
-          {programs.map((program) => {
-            const startMin = timeToMinutes(program.startTime);
-            const endMin = program.endTime ? timeToMinutes(program.endTime) : null;
-            const isActive = isToday && currentMinutes >= startMin && (endMin === null || currentMinutes < endMin);
-            const isPast = isToday && (endMin !== null ? currentMinutes >= endMin : currentMinutes >= startMin + 60);
+          {items.map((item) => {
+            if (item.type === "program") {
+              const program = item.data;
+              const startMin = timeToMinutes(program.startTime);
+              const endMin = program.endTime ? timeToMinutes(program.endTime) : null;
+              const isActive = isToday && currentMinutes >= startMin && (endMin === null || currentMinutes < endMin);
+              const isPast = isToday && (endMin !== null ? currentMinutes >= endMin : currentMinutes >= startMin + 60);
 
-            return (
-              <div key={program.id} className="relative pl-6 pb-6">
-                {/* Timeline dot */}
-                <div className={`absolute left-[-4px] top-2 w-2.5 h-2.5 rounded-full border-2 ${
-                  isActive ? "bg-theme_primary border-theme_primary scale-125" : isPast ? "bg-gray-300 dark:bg-gray-600 border-gray-300" : "bg-white dark:bg-gray-900 border-theme_primary"
-                }`} />
+              return (
+                <div key={program.id} className="relative pl-6 pb-6">
+                  {/* Timeline dot */}
+                  <div className={`absolute left-[-4px] top-2 w-2.5 h-2.5 rounded-full border-2 ${
+                    isActive ? "bg-theme_primary border-theme_primary scale-125" : isPast ? "bg-gray-300 dark:bg-gray-600 border-gray-300" : "bg-white dark:bg-gray-900 border-theme_primary"
+                  }`} />
 
-                {/* Program card */}
-                <div className={`rounded-2xl p-3 border transition-all ${
-                  isActive
-                    ? "bg-theme_primary/10 border-theme_primary dark:bg-theme_primary/20"
-                    : isPast
-                    ? "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 opacity-60"
-                    : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"
-                }`}>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold text-sm">{program.name}</p>
-                        {isActive && (
-                          <span className="text-xs bg-theme_primary text-white rounded-full px-2 py-0.5 font-semibold shrink-0">
-                            Most
-                          </span>
+                  {/* Program card */}
+                  <div className={`rounded-2xl p-3 border transition-all ${
+                    isActive
+                      ? "bg-theme_primary/10 border-theme_primary dark:bg-theme_primary/20"
+                      : isPast
+                      ? "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 opacity-60"
+                      : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"
+                  }`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-sm">{program.name}</p>
+                          {isActive && (
+                            <span className="text-xs bg-theme_primary text-white rounded-full px-2 py-0.5 font-semibold shrink-0">
+                              Most
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {program.startTime}{program.endTime ? ` – ${program.endTime}` : ""}
+                        </p>
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <button onClick={() => setEditingProgram(program)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                          <PiPencil className="text-sm text-gray-500" />
+                        </button>
+                        <button onClick={() => handleDelete(program.id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950">
+                          <PiTrash className="text-sm text-red-500" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {program.address && (
+                      <a
+                        href={`https://maps.google.com/?q=${encodeURIComponent(program.address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-xs text-theme_primary mt-2"
+                      >
+                        <PiMapPin className="shrink-0" />
+                        <span className="underline truncate">{program.address}</span>
+                      </a>
+                    )}
+
+                    {program.notes && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 border-t dark:border-gray-700 pt-1.5">
+                        {program.notes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            } else {
+              const fc = item.data; // FlightCard
+              const startMin = timeToMinutes(fc.startTime);
+              const endMin = fc.endTime ? timeToMinutes(fc.endTime) : null;
+              const isActive = isToday && currentMinutes >= startMin && (endMin === null || currentMinutes < endMin);
+              const isPast = isToday && (endMin !== null ? currentMinutes >= endMin : currentMinutes >= startMin + 60);
+
+              return (
+                <div key="__flight__" className="relative pl-6 pb-6">
+                  {/* Timeline dot */}
+                  <div className={`absolute left-[-4px] top-2 w-2.5 h-2.5 rounded-full border-2 ${
+                    isActive ? "bg-theme_primary border-theme_primary scale-125" : isPast ? "bg-gray-300 dark:bg-gray-600 border-gray-300" : "bg-white dark:bg-gray-900 border-theme_primary"
+                  }`} />
+
+                  {/* Flight card */}
+                  <div className={`rounded-2xl p-3 border transition-all ${
+                    isActive
+                      ? "bg-theme_primary/10 border-theme_primary dark:bg-theme_primary/20"
+                      : isPast
+                      ? "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 opacity-60"
+                      : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"
+                  }`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <PiAirplaneTakeoff className="text-theme_primary shrink-0" />
+                          <p className="font-semibold text-sm">{fc.label}</p>
+                          {isActive && (
+                            <span className="text-xs bg-theme_primary text-white rounded-full px-2 py-0.5 font-semibold shrink-0">Most</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {fc.startTime}{fc.endTime ? ` – ${fc.endTime}` : ""}
+                        </p>
+                        {(fc.airline || fc.flightNumber) && (
+                          <p className="text-xs text-gray-400 mt-0.5">
+                            {[fc.airline, fc.flightNumber].filter(Boolean).join(" · ")}
+                          </p>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {program.startTime}{program.endTime ? ` – ${program.endTime}` : ""}
-                      </p>
-                    </div>
-                    <div className="flex gap-1 shrink-0">
-                      <button onClick={() => setEditingProgram(program)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <Link
+                        href={fc.href}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 shrink-0"
+                      >
                         <PiPencil className="text-sm text-gray-500" />
-                      </button>
-                      <button onClick={() => handleDelete(program.id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950">
-                        <PiTrash className="text-sm text-red-500" />
-                      </button>
+                      </Link>
                     </div>
                   </div>
-
-                  {program.address && (
-                    <a
-                      href={`https://maps.google.com/?q=${encodeURIComponent(program.address)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-theme_primary mt-2"
-                    >
-                      <PiMapPin className="shrink-0" />
-                      <span className="underline truncate">{program.address}</span>
-                    </a>
-                  )}
-
-                  {program.notes && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 border-t dark:border-gray-700 pt-1.5">
-                      {program.notes}
-                    </p>
-                  )}
                 </div>
-              </div>
-            );
+              );
+            }
           })}
 
           {/* Current-time "Most" badge is shown INSIDE the active card (see isActive styling above),

@@ -11,11 +11,12 @@ type Props = {
   flight: VacationFlight | null;
   flightId: string;
   directionLabel: string;
+  vacationDate: string;
 };
 
 type FormValues = Omit<VacationFlight, "id">;
 
-export default function FlightEditor({ flight, flightId, directionLabel }: Props) {
+export default function FlightEditor({ flight, flightId, directionLabel, vacationDate }: Props) {
   const [editing, setEditing] = useState(!flight); // auto-open if no flight yet
   const router = useRouter();
 
@@ -41,20 +42,21 @@ export default function FlightEditor({ flight, flightId, directionLabel }: Props
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
         <h2 className="text-lg font-bold">{directionLabel} – Adatok</h2>
+        <p className="text-sm text-gray-500 -mt-2">{vacationDate}</p>
 
         <FlightField label="Járatszám" {...register("flightNumber")} placeholder="pl. BA2759" />
         <FlightField label="Légitársaság" {...register("airline")} placeholder="pl. British Airways" />
 
         <div className="border-t dark:border-gray-700 pt-3">
           <p className="text-sm font-semibold text-gray-500 uppercase mb-2">Indulás</p>
-          <FlightField label="Időpont (ÉÉÉÉ-HH-NN ÓÓ:PP)" {...register("departureTime", { required: true })} placeholder="2026-08-01 07:30" />
+          <FlightField label="Indulás időpontja" type="time" {...register("departureTime", { required: true })} />
           {/* Terminal is optional — budget airlines assign terminals close to departure */}
           <FlightField label="Terminál (opcionális)" {...register("departureTerminal")} placeholder="pl. T2" className="mt-3" />
         </div>
 
         <div className="border-t dark:border-gray-700 pt-3">
           <p className="text-sm font-semibold text-gray-500 uppercase mb-2">Érkezés</p>
-          <FlightField label="Időpont (ÉÉÉÉ-HH-NN ÓÓ:PP)" {...register("arrivalTime", { required: true })} placeholder="2026-08-01 10:00" />
+          <FlightField label="Érkezés időpontja" type="time" {...register("arrivalTime", { required: true })} />
           <FlightField label="Terminál (opcionális)" {...register("arrivalTerminal")} placeholder="pl. T5" className="mt-3" />
         </div>
 
@@ -87,6 +89,7 @@ export default function FlightEditor({ flight, flightId, directionLabel }: Props
           <PiPencil className="text-xl text-theme_primary" />
         </button>
       </div>
+      <p className="text-sm text-gray-500">{vacationDate}</p>
 
       {(flight!.flightNumber || flight!.airline) && (
         <InfoRow label="Járat" value={[flight!.airline, flight!.flightNumber].filter((s): s is string => Boolean(s)).join(" · ")} />
@@ -94,7 +97,7 @@ export default function FlightEditor({ flight, flightId, directionLabel }: Props
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Indulás</p>
-        <p className="font-semibold text-lg">{formatDateTime(flight!.departureTime)}</p>
+        <p className="font-semibold text-lg">{flight!.departureTime}</p>
         {flight!.departureTerminal && (
           <p className="text-sm text-gray-500">Terminál: <span className="font-medium text-gray-900 dark:text-white">{flight!.departureTerminal}</span></p>
         )}
@@ -102,7 +105,7 @@ export default function FlightEditor({ flight, flightId, directionLabel }: Props
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Érkezés</p>
-        <p className="font-semibold text-lg">{formatDateTime(flight!.arrivalTime)}</p>
+        <p className="font-semibold text-lg">{flight!.arrivalTime}</p>
         {flight!.arrivalTerminal && (
           <p className="text-sm text-gray-500">Terminál: <span className="font-medium text-gray-900 dark:text-white">{flight!.arrivalTerminal}</span></p>
         )}
@@ -138,14 +141,4 @@ function FlightField({ label, className, ...props }: { label: string; className?
       <input {...props} className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600" />
     </div>
   );
-}
-
-function formatDateTime(dt: string): string {
-  try {
-    const [datePart, timePart] = dt.split(" ");
-    const date = new Date(datePart + "T" + timePart);
-    return date.toLocaleString("hu-HU", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
-  } catch {
-    return dt;
-  }
 }
