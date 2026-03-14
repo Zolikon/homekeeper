@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank, PiWarning } from "react-icons/pi";
+import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank, PiWarning, PiArrowLeft } from "react-icons/pi";
 import type { VacationInfo, VacationFlight, WeatherData } from "@/app/__backend/vacation.types";
 import WeatherWidget, { WeatherIcon } from "./WeatherWidget";
 import HotelEditModal from "./HotelEditModal";
@@ -21,8 +21,11 @@ export default function VacationMain({ info, weather, outboundFlight, returnFlig
   return (
     <div className="h-full overflow-y-auto flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
       {/* Header */}
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">{info.city}</h1>
+      <div className="flex items-center gap-2">
+        <Link href="/" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 shrink-0">
+          <PiArrowLeft className="text-xl" />
+        </Link>
+        <h1 className="text-2xl font-bold flex-1">{info.city}</h1>
         {weather && (
           <div className="flex items-center gap-1.5 shrink-0">
             <WeatherIcon code={weather.current.weatherCode} />
