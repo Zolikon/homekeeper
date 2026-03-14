@@ -53,24 +53,33 @@ const WMO_DESCRIPTIONS: Record<number, string> = {
  */
 export async function getWeather(lat: number, lon: number): Promise<WeatherData | null> {
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=3&timezone=auto`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=3&timezone=auto`;
     const res = await fetch(url, { next: { revalidate: 900 } }); // cache 15 min
     if (!res.ok) return null;
 
     const json = await res.json();
+    const current = json?.current;
     const daily = json?.daily;
-    if (!daily?.time?.length) return null;
+    if (!current || !daily?.time?.length) return null;
 
-    return (daily.time as string[]).map((date, i): WeatherDay => {
-      const code: number = daily.weather_code[i] ?? 0;
-      return {
-        date,
-        tempMax: Math.round(daily.temperature_2m_max[i]),
-        tempMin: Math.round(daily.temperature_2m_min[i]),
-        weatherCode: code,
-        weatherDescription: WMO_DESCRIPTIONS[code] ?? "Ismeretlen",
-      };
-    });
+    const currentCode: number = current.weather_code ?? 0;
+    return {
+      current: {
+        temperatureCelsius: Math.round(current.temperature_2m),
+        weatherCode: currentCode,
+        weatherDescription: WMO_DESCRIPTIONS[currentCode] ?? "Ismeretlen",
+      },
+      days: (daily.time as string[]).map((date, i): WeatherDay => {
+        const code: number = daily.weather_code[i] ?? 0;
+        return {
+          date,
+          tempMax: Math.round(daily.temperature_2m_max[i]),
+          tempMin: Math.round(daily.temperature_2m_min[i]),
+          weatherCode: code,
+          weatherDescription: WMO_DESCRIPTIONS[code] ?? "Ismeretlen",
+        };
+      }),
+    };
   } catch {
     return null;
   }

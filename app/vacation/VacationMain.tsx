@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank, PiWarning } from "react-icons/pi";
 import type { VacationInfo, VacationFlight, WeatherData } from "@/app/__backend/vacation.types";
-import WeatherWidget from "./WeatherWidget";
+import WeatherWidget, { WeatherIcon } from "./WeatherWidget";
 import HotelEditModal from "./HotelEditModal";
 import DeleteVacationButton from "./DeleteVacationButton";
 
@@ -21,7 +21,15 @@ export default function VacationMain({ info, weather, outboundFlight, returnFlig
   return (
     <div className="flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
       {/* Header */}
-      <h1 className="text-2xl font-bold">{info.city}</h1>
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold">{info.city}</h1>
+        {weather && (
+          <div className="flex items-center gap-1.5 shrink-0">
+            <WeatherIcon code={weather.current.weatherCode} />
+            <span className="text-lg font-semibold">{weather.current.temperatureCelsius}°C</span>
+          </div>
+        )}
+      </div>
       {weather && <WeatherWidget weather={weather} />}
 
       {/* Date range */}

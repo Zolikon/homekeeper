@@ -47,7 +47,14 @@ export type WeatherDay = {
   weatherDescription: string;
 };
 
-export type WeatherData = WeatherDay[]; // [today, tomorrow, day after tomorrow]
+export type WeatherData = {
+  current: {
+    temperatureCelsius: number;
+    weatherCode: number;
+    weatherDescription: string;
+  };
+  days: WeatherDay[]; // [today, tomorrow, day after tomorrow]
+};
 
 // Singleton IDs
 export const VACATION_INFO_ID = "main";
