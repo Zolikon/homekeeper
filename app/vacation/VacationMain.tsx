@@ -21,10 +21,8 @@ export default function VacationMain({ info, weather, outboundFlight, returnFlig
   return (
     <div className="flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{info.city}</h1>
-        {weather && <WeatherWidget weather={weather} />}
-      </div>
+      <h1 className="text-2xl font-bold">{info.city}</h1>
+      {weather && <WeatherWidget weather={weather} />}
 
       {/* Date range */}
       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">

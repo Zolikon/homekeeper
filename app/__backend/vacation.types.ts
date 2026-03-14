@@ -39,12 +39,15 @@ export type VacationProgram = {
   notes?: string;
 };
 
-export type WeatherData = {
-  temperatureCelsius: number;
+export type WeatherDay = {
+  date: string;              // "YYYY-MM-DD"
+  tempMax: number;
+  tempMin: number;
   weatherCode: number;       // WMO weather code
   weatherDescription: string;
-  windSpeedKmh: number;
 };
+
+export type WeatherData = WeatherDay[]; // [today, tomorrow, day after tomorrow]
 
 // Singleton IDs
 export const VACATION_INFO_ID = "main";
