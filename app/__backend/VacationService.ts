@@ -35,22 +35,41 @@ export async function getVacationInfo(): Promise<VacationInfo | null> {
     city: data.city,
     hotelName: data.hotelName,
     hotelAddress: data.hotelAddress ?? undefined,
-    hotelCheckIn: data.hotelCheckIn ?? undefined,
-    hotelCheckOut: data.hotelCheckOut ?? undefined,
     hotelNotes: data.hotelNotes ?? undefined,
+    startDate: data.startDate,
+    endDate: data.endDate,
     weatherLat: data.weatherLat ?? undefined,
     weatherLon: data.weatherLon ?? undefined,
   };
 }
 
-export async function createVacation(city: string, hotelName: string): Promise<void> {
+function generateDateRange(startDate: string, endDate: string): string[] {
+  const dates: string[] = [];
+  const current = new Date(startDate + "T12:00:00");
+  const end = new Date(endDate + "T12:00:00");
+  while (current <= end) {
+    dates.push(current.toISOString().slice(0, 10));
+    current.setDate(current.getDate() + 1);
+  }
+  return dates;
+}
+
+export async function createVacation(city: string, hotelName: string, startDate: string, endDate: string): Promise<void> {
   const client = getClient();
   await client.models.VacationInfo.create({
     id: VACATION_INFO_ID,
     city,
     hotelName,
+    startDate,
+    endDate,
   });
+  const { randomUUID } = await import("crypto");
+  const dates = generateDateRange(startDate, endDate);
+  for (let i = 0; i < dates.length; i++) {
+    await client.models.VacationDay.create({ id: randomUUID(), date: dates[i], order: i });
+  }
   revalidatePath("/vacation");
+  revalidatePath("/vacation/programs");
 }
 
 export async function updateVacationInfo(info: Partial<VacationInfo>): Promise<void> {

@@ -37,9 +37,9 @@ const schema = a.schema({
       city: a.string().required(),
       hotelName: a.string().required(),
       hotelAddress: a.string(),
-      hotelCheckIn: a.string(), // "YYYY-MM-DD"
-      hotelCheckOut: a.string(), // "YYYY-MM-DD"
       hotelNotes: a.string(),
+      startDate: a.string().required(), // "YYYY-MM-DD"
+      endDate: a.string().required(),   // "YYYY-MM-DD"
       weatherLat: a.float(), // geocoded latitude — cached to avoid re-geocoding on force-dynamic pages
       weatherLon: a.float(), // geocoded longitude
     })

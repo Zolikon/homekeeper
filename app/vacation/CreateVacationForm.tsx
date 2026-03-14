@@ -8,6 +8,8 @@ import { geocodeAndStore } from "@/app/__backend/WeatherService";
 type FormValues = {
   city: string;
   hotelName: string;
+  startDate: string;
+  endDate: string;
 };
 
 export default function CreateVacationForm() {
@@ -15,7 +17,7 @@ export default function CreateVacationForm() {
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<FormValues>();
 
   const onSubmit = async (values: FormValues) => {
-    await createVacation(values.city, values.hotelName);
+    await createVacation(values.city, values.hotelName, values.startDate, values.endDate);
     // Geocode in background after creation so weather works on next page load
     await geocodeAndStore(values.city);
     router.refresh();
@@ -43,6 +45,27 @@ export default function CreateVacationForm() {
           className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
         />
         {errors.hotelName && <span className="text-red-500 text-xs">{errors.hotelName.message}</span>}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Kezdő dátum *</label>
+          <input
+            type="date"
+            {...register("startDate", { required: "Kötelező mező" })}
+            className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
+          />
+          {errors.startDate && <span className="text-red-500 text-xs">{errors.startDate.message}</span>}
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Záró dátum *</label>
+          <input
+            type="date"
+            {...register("endDate", { required: "Kötelező mező" })}
+            className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
+          />
+          {errors.endDate && <span className="text-red-500 text-xs">{errors.endDate.message}</span>}
+        </div>
       </div>
 
       <button

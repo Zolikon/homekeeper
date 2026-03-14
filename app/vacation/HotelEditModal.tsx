@@ -16,9 +16,9 @@ type FormValues = {
   city: string;
   hotelName: string;
   hotelAddress: string;
-  hotelCheckIn: string;
-  hotelCheckOut: string;
   hotelNotes: string;
+  startDate: string;
+  endDate: string;
 };
 
 export default function HotelEditModal({ info, onClose }: Props) {
@@ -28,9 +28,9 @@ export default function HotelEditModal({ info, onClose }: Props) {
       city: info.city,
       hotelName: info.hotelName,
       hotelAddress: info.hotelAddress ?? "",
-      hotelCheckIn: info.hotelCheckIn ?? "",
-      hotelCheckOut: info.hotelCheckOut ?? "",
       hotelNotes: info.hotelNotes ?? "",
+      startDate: info.startDate,
+      endDate: info.endDate,
     },
   });
 
@@ -39,9 +39,9 @@ export default function HotelEditModal({ info, onClose }: Props) {
       city: values.city,
       hotelName: values.hotelName,
       hotelAddress: values.hotelAddress || undefined,
-      hotelCheckIn: values.hotelCheckIn || undefined,
-      hotelCheckOut: values.hotelCheckOut || undefined,
       hotelNotes: values.hotelNotes || undefined,
+      startDate: values.startDate,
+      endDate: values.endDate,
     });
     // Re-geocode if city changed so weather coordinates stay accurate
     if (values.city !== info.city) {
@@ -65,8 +65,10 @@ export default function HotelEditModal({ info, onClose }: Props) {
           <Field label="Város" {...register("city", { required: true })} />
           <Field label="Szálloda neve" {...register("hotelName", { required: true })} />
           <Field label="Szálloda címe" {...register("hotelAddress")} placeholder="pl. 10 John Adam St, London" />
-          <Field label="Check-in dátum" type="date" {...register("hotelCheckIn")} />
-          <Field label="Check-out dátum" type="date" {...register("hotelCheckOut")} />
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Kezdő dátum" type="date" {...register("startDate", { required: true })} />
+            <Field label="Záró dátum" type="date" {...register("endDate", { required: true })} />
+          </div>
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Megjegyzés</label>
             <textarea

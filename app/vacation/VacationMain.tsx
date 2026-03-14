@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings } from "react-icons/pi";
+import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank } from "react-icons/pi";
 import type { VacationInfo, WeatherData } from "@/app/__backend/vacation.types";
 import WeatherWidget from "./WeatherWidget";
 import HotelEditModal from "./HotelEditModal";
@@ -24,6 +24,12 @@ export default function VacationMain({ info, weather }: Props) {
         {weather && <WeatherWidget weather={weather} />}
       </div>
 
+      {/* Date range */}
+      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        <PiCalendarBlank className="text-theme_primary shrink-0" />
+        <span>{info.startDate} – {info.endDate}</span>
+      </div>
+
       {/* Hotel card */}
       <div
         className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer active:opacity-80"
@@ -43,13 +49,6 @@ export default function VacationMain({ info, weather }: Props) {
               >
                 {info.hotelAddress}
               </a>
-            )}
-            {(info.hotelCheckIn || info.hotelCheckOut) && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                {info.hotelCheckIn && `Be: ${info.hotelCheckIn}`}
-                {info.hotelCheckIn && info.hotelCheckOut && " · "}
-                {info.hotelCheckOut && `Ki: ${info.hotelCheckOut}`}
-              </p>
             )}
           </div>
         </div>

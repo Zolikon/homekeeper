@@ -5,9 +5,9 @@ export type VacationInfo = {
   city: string;
   hotelName: string;
   hotelAddress?: string;
-  hotelCheckIn?: string;   // "YYYY-MM-DD"
-  hotelCheckOut?: string;  // "YYYY-MM-DD"
   hotelNotes?: string;
+  startDate: string;       // "YYYY-MM-DD"
+  endDate: string;         // "YYYY-MM-DD"
   weatherLat?: number;     // cached geocoded coordinates
   weatherLon?: number;
 };
