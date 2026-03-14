@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProgramsForDay, addDay, deleteDay } from "@/app/__backend/VacationService";
+import { getProgramsForDay } from "@/app/__backend/VacationService";
 import type { VacationDay, VacationProgram } from "@/app/__backend/vacation.types";
 import DayTimeline from "./DayTimeline";
-import DayModal from "./DayModal";
-import { PiPlus, PiTrash } from "react-icons/pi";
 
 type Props = {
   initialDays: VacationDay[];
@@ -25,7 +23,7 @@ function formatDayLabel(date: string): string {
 }
 
 export default function ProgramsView({ initialDays }: Props) {
-  const [days, setDays] = useState<VacationDay[]>(initialDays);
+  const days = initialDays;
   const [selectedDayId, setSelectedDayId] = useState<string | null>(() => {
     const today = getTodayDate();
     const todayDay = initialDays.find((d) => d.date === today);
@@ -33,7 +31,6 @@ export default function ProgramsView({ initialDays }: Props) {
   });
   const [programs, setPrograms] = useState<VacationProgram[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
-  const [addDayOpen, setAddDayOpen] = useState(false);
 
   useEffect(() => {
     if (!selectedDayId) return;
@@ -49,27 +46,6 @@ export default function ProgramsView({ initialDays }: Props) {
 
   const today = getTodayDate();
   const selectedDay = days.find((d) => d.id === selectedDayId);
-
-  const handleAddDay = async (date: string) => {
-    // addDay returns the real server-assigned UUID so the optimistic state uses the correct ID
-    const realId = await addDay(date);
-    const maxOrder = days.length === 0 ? -1 : Math.max(...days.map((d) => d.order));
-    const newDay: VacationDay = { id: realId, date, order: maxOrder + 1 };
-    setDays([...days, newDay].sort((a, b) => a.order - b.order));
-    setSelectedDayId(realId);
-    setAddDayOpen(false);
-  };
-
-  const handleDeleteDay = async () => {
-    if (!selectedDayId) return;
-    if (!confirm("Biztosan törlöd ezt a napot az összes programjával együtt?")) return;
-    await deleteDay(selectedDayId);
-    const remaining = days.filter((d) => d.id !== selectedDayId);
-    setDays(remaining);
-    setSelectedDayId(remaining[0]?.id ?? null);
-    setPrograms([]);
-    if (remaining.length === 0) setLoadingPrograms(false);
-  };
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
@@ -88,30 +64,16 @@ export default function ProgramsView({ initialDays }: Props) {
             {formatDayLabel(day.date)}
           </button>
         ))}
-        <button
-          onClick={() => setAddDayOpen(true)}
-          className="shrink-0 px-3 py-2 rounded-xl text-sm font-medium bg-gray-100 dark:bg-gray-800 text-theme_primary flex items-center gap-1"
-        >
-          <PiPlus /> Nap
-        </button>
       </div>
 
-      {/* Day controls */}
+      {/* Selected day date */}
       {selectedDay && (
-        <div className="flex items-center justify-between px-4 pb-2 shrink-0">
-          <p className="text-sm text-gray-500">
-            {selectedDay.date === today && (
-              <span className="text-theme_primary font-semibold">● Ma · </span>
-            )}
-            {selectedDay.date}
-          </p>
-          <button
-            onClick={handleDeleteDay}
-            className="text-red-500 p-1 rounded hover:bg-red-50 dark:hover:bg-red-950"
-          >
-            <PiTrash />
-          </button>
-        </div>
+        <p className="text-sm text-gray-500 px-4 pb-2 shrink-0">
+          {selectedDay.date === today && (
+            <span className="text-theme_primary font-semibold">● Ma · </span>
+          )}
+          {selectedDay.date}
+        </p>
       )}
 
       {/* Timeline */}
@@ -124,17 +86,10 @@ export default function ProgramsView({ initialDays }: Props) {
         />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-400">
-          {days.length === 0 ? "Még nincs nap hozzáadva." : "Betöltés..."}
+          {days.length === 0 ? "Nincsenek napok." : "Betöltés..."}
         </div>
       )}
 
-      {addDayOpen && (
-        <DayModal
-          existingDates={days.map((d) => d.date)}
-          onAdd={handleAddDay}
-          onClose={() => setAddDayOpen(false)}
-        />
-      )}
     </div>
   );
 }
