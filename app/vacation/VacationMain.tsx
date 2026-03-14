@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank } from "react-icons/pi";
-import type { VacationInfo, WeatherData } from "@/app/__backend/vacation.types";
+import { PiAirplaneTakeoff, PiAirplaneLanding, PiCalendar, PiBuildings, PiCalendarBlank, PiWarning } from "react-icons/pi";
+import type { VacationInfo, VacationFlight, WeatherData } from "@/app/__backend/vacation.types";
 import WeatherWidget from "./WeatherWidget";
 import HotelEditModal from "./HotelEditModal";
 import DeleteVacationButton from "./DeleteVacationButton";
@@ -11,9 +11,11 @@ import DeleteVacationButton from "./DeleteVacationButton";
 type Props = {
   info: VacationInfo;
   weather: WeatherData | null;
+  outboundFlight: VacationFlight | null;
+  returnFlight: VacationFlight | null;
 };
 
-export default function VacationMain({ info, weather }: Props) {
+export default function VacationMain({ info, weather, outboundFlight, returnFlight }: Props) {
   const [hotelModalOpen, setHotelModalOpen] = useState(false);
 
   return (
@@ -62,9 +64,9 @@ export default function VacationMain({ info, weather }: Props) {
 
       {/* Navigation cards */}
       <div className="grid grid-cols-1 gap-3">
-        <NavCard href="/vacation/flight-out" icon={<PiAirplaneTakeoff />} label="Oda repülés" />
+        <NavCard href="/vacation/flight-out" icon={<PiAirplaneTakeoff />} label="Oda repülés" missing={!outboundFlight} />
         <NavCard href="/vacation/programs" icon={<PiCalendar />} label="Napi programok" />
-        <NavCard href="/vacation/flight-back" icon={<PiAirplaneLanding />} label="Vissza repülés" />
+        <NavCard href="/vacation/flight-back" icon={<PiAirplaneLanding />} label="Vissza repülés" missing={!returnFlight} />
       </div>
 
       {/* Delete section */}
@@ -79,15 +81,23 @@ export default function VacationMain({ info, weather }: Props) {
   );
 }
 
-function NavCard({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function NavCard({ href, icon, label, missing }: { href: string; icon: React.ReactNode; label: string; missing?: boolean }) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 active:opacity-80"
+      className={`flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border active:opacity-80 ${
+        missing ? "border-orange-300 dark:border-orange-700" : "border-gray-100 dark:border-gray-700"
+      }`}
     >
       <span className="text-2xl text-theme_primary">{icon}</span>
       <span className="font-semibold">{label}</span>
-      <span className="ml-auto text-gray-400">›</span>
+      {missing && (
+        <span className="ml-auto flex items-center gap-1 text-xs text-orange-500 font-medium">
+          <PiWarning className="text-base" />
+          Nincs beállítva
+        </span>
+      )}
+      {!missing && <span className="ml-auto text-gray-400">›</span>}
     </Link>
   );
 }
