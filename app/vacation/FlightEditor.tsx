@@ -76,7 +76,9 @@ export default function FlightEditor({ flight, flightId, directionLabel }: Props
     );
   }
 
-  // Read-only display
+  // Read-only display — flight is null briefly between setEditing(false) and router.refresh() completing
+  if (!flight) return null;
+
   return (
     <div className="flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
       <div className="flex items-center justify-between">
