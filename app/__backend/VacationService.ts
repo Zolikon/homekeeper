@@ -177,11 +177,13 @@ export async function getProgramsForDay(dayId: string): Promise<VacationProgram[
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 }
 
-export async function addProgram(program: Omit<VacationProgram, "id">): Promise<void> {
+export async function addProgram(program: Omit<VacationProgram, "id">): Promise<string> {
   const client = getClient();
   const { randomUUID } = await import("crypto");
-  await client.models.VacationProgram.create({ id: randomUUID(), ...program });
+  const id = randomUUID();
+  await client.models.VacationProgram.create({ id, ...program });
   revalidatePath("/vacation/programs");
+  return id;
 }
 
 export async function updateProgram(program: VacationProgram): Promise<void> {

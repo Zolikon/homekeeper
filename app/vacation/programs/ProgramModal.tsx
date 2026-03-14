@@ -52,9 +52,8 @@ export default function ProgramModal({ dayId, program, onSaved, onClose }: Props
         address: values.address || undefined,
         notes: values.notes || undefined,
       };
-      await addProgram(newProg);
-      // Optimistic: create local id for immediate display
-      onSaved({ id: crypto.randomUUID(), ...newProg });
+      const realId = await addProgram(newProg);
+      onSaved({ id: realId, ...newProg });
     }
     onClose();
   };
