@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { deleteProgram } from "@/app/__backend/VacationService";
 import type { VacationProgram } from "@/app/__backend/vacation.types";
 import ProgramModal from "./ProgramModal";
+import MenuHolder from "@/app/__components/MenuHolder";
 import { PiMapPin, PiPlus, PiPencil, PiTrash } from "react-icons/pi";
 
 type Props = {
@@ -134,12 +135,14 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       )}
 
       {/* FAB */}
-      <button
-        onClick={() => setAddModalOpen(true)}
-        className="fixed bottom-14 right-4 size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center"
-      >
-        <PiPlus className="text-2xl" />
-      </button>
+      <MenuHolder>
+        <button
+          onClick={() => setAddModalOpen(true)}
+          className="size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center"
+        >
+          <PiPlus className="text-2xl" />
+        </button>
+      </MenuHolder>
 
       {addModalOpen && (
         <ProgramModal dayId={dayId} program={null} onSaved={handleSaved} onClose={() => setAddModalOpen(false)} />

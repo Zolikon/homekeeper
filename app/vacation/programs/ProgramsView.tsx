@@ -41,6 +41,9 @@ export default function ProgramsView({ initialDays }: Props) {
     getProgramsForDay(selectedDayId).then((progs) => {
       setPrograms(progs);
       setLoadingPrograms(false);
+    }).catch((err) => {
+      console.error("Failed to load programs:", err);
+      setLoadingPrograms(false);
     });
   }, [selectedDayId]);
 
@@ -65,6 +68,7 @@ export default function ProgramsView({ initialDays }: Props) {
     setDays(remaining);
     setSelectedDayId(remaining[0]?.id ?? null);
     setPrograms([]);
+    if (remaining.length === 0) setLoadingPrograms(false);
   };
 
   return (
