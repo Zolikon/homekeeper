@@ -1,4 +1,4 @@
-import { PiBowlFoodFill } from "react-icons/pi";
+import { PiBowlFoodFill, PiAirplaneTakeoff } from "react-icons/pi";
 import { countPendingItems } from "./__backend/ShoppingService";
 import { MdOutlineShoppingCart, MdCreditCard, MdPets, MdInfoOutline, MdDone, MdCall } from "react-icons/md";
 import { PanelButton } from "./__components/PanelButton";
@@ -40,6 +40,10 @@ export default async function Home() {
         <PanelButton link="/info">
           <MdInfoOutline size={ICON_SIZE} />
           <p>Info</p>
+        </PanelButton>
+        <PanelButton link="/vacation">
+          <PiAirplaneTakeoff size={ICON_SIZE} />
+          <p>Nyaralás</p>
         </PanelButton>
       </div>
       <div className="flex gap-2 items-center h-1/5 p-4 justify-around w-full">

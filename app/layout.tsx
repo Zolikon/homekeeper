@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./globalicon.css";
@@ -31,7 +32,7 @@ export default function RootLayout({
       >
         <ConfigureAmplify />
         <header className="w-full bg-theme_primary text-white text-center h-[10%] flex gap-3 justify-center items-center select-none relative">
-          <img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="object-contain" />
+          <Link href="/"><img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="object-contain" /></Link>
           <div className="absolute right-4">
             <LogoutButton />
           </div>
