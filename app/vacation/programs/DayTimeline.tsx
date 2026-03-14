@@ -42,7 +42,9 @@ const LABEL_COL_W   = 44;       // px
 const EVENT_GAP     = 6;        // px between side-by-side columns
 
 function toMin(time: string): number {
-  const [h, m] = time.split(":").map(Number);
+  // Accept "HH:mm" or legacy "YYYY-MM-DD HH:mm"
+  const t = time.length > 5 ? time.slice(-5) : time;
+  const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
 }
 

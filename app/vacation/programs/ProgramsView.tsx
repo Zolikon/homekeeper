@@ -96,8 +96,8 @@ export default function ProgramsView({ initialDays, startDate, endDate, outbound
           onProgramsChange={setPrograms}
           flightCard={flightForSelectedDay ? {
             label: selectedDay?.date === startDate ? "Oda repülés" : "Vissza repülés",
-            startTime: flightForSelectedDay.departureTime,
-            endTime: flightForSelectedDay.arrivalTime,
+            startTime: flightForSelectedDay.departureTime.slice(-5),
+            endTime: flightForSelectedDay.arrivalTime.slice(-5),
             flightNumber: flightForSelectedDay.flightNumber,
             airline: flightForSelectedDay.airline,
             href: flightHref,
