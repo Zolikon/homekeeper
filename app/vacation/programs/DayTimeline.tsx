@@ -32,14 +32,14 @@ type TimelineItem =
 type LaidOutItem = TimelineItem & { col: number; totalCols: number; endMin: number };
 
 // Layout constants
-const PX_PER_HOUR   = 72;
-const PX_PER_MIN    = PX_PER_HOUR / 60;
-const DEFAULT_START = 8 * 60;   // 8:00 in minutes
-const DEFAULT_END   = 22 * 60;  // 22:00 in minutes
+const PX_PER_HOUR  = 72;
+const PX_PER_MIN   = PX_PER_HOUR / 60;
+const DEFAULT_START = 8 * 60;   // 8:00
+const DEFAULT_END   = 22 * 60;  // 22:00
 const MIN_DURATION  = 30;       // minutes for events with no endTime
-const MIN_HEIGHT_PX = 28;       // minimum card height
-const LABEL_COL_W   = 44;       // px — left time-label column
-const EVENT_GAP     = 6;        // px — gap between overlapping event columns
+const MIN_HEIGHT_PX = 28;
+const LABEL_COL_W   = 44;       // px
+const EVENT_GAP     = 6;        // px between side-by-side columns
 
 function toMin(time: string): number {
   const [h, m] = time.split(":").map(Number);
@@ -71,12 +71,12 @@ function assignColumns(items: TimelineItem[]): LaidOutItem[] {
     item.col = col;
   });
 
-  // totalCols = highest col among all concurrent items + 1
+  // totalCols = max col among all concurrent events + 1
   withEnd.forEach(item => {
     const startMin = toMin(item.startTime);
     const maxCol = withEnd
       .filter(o => toMin(o.startTime) < item.endMin && o.endMin > startMin)
-      .reduce((max, o) => Math.max(max, o.col), 0);
+      .reduce((mx, o) => Math.max(mx, o.col), 0);
     item.totalCols = maxCol + 1;
   });
 
@@ -84,7 +84,7 @@ function assignColumns(items: TimelineItem[]): LaidOutItem[] {
 }
 
 export default function DayTimeline({ dayId, programs, isToday, onProgramsChange, flightCard }: Props) {
-  const [addModalOpen, setAddModalOpen]   = useState(false);
+  const [addModalOpen, setAddModalOpen]     = useState(false);
   const [editingProgram, setEditingProgram] = useState<VacationProgram | null>(null);
   const [currentMinutes, setCurrentMinutes] = useState(nowMinutes());
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -95,7 +95,6 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
     return () => clearInterval(interval);
   }, [isToday]);
 
-  // Build merged item list
   const items: TimelineItem[] = [
     ...programs.map(p => ({
       type: "program" as const,
@@ -109,11 +108,11 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       : []),
   ];
 
-  // Compute time range — extend 8–22 default only when events fall outside it
+  // Extend beyond 8–22 only when an event falls outside that range
   const allMins = items.flatMap(item => {
-    const start = toMin(item.startTime);
-    const end   = item.endTime ? toMin(item.endTime) : start + MIN_DURATION;
-    return [start, end];
+    const s = toMin(item.startTime);
+    const e = item.endTime ? toMin(item.endTime) : s + MIN_DURATION;
+    return [s, e];
   });
   const rangeStart  = allMins.length > 0 ? Math.min(DEFAULT_START, ...allMins) : DEFAULT_START;
   const rangeEnd    = allMins.length > 0 ? Math.max(DEFAULT_END,   ...allMins) : DEFAULT_END;
@@ -124,14 +123,14 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
 
   const laidOut = assignColumns(items);
 
-  // Scroll to current time on mount for today
+  // Scroll to current time once on mount for today
   useEffect(() => {
     if (!isToday || !scrollRef.current) return;
     const nowTop = (currentMinutes - startHour * 60) * PX_PER_MIN;
     const h = scrollRef.current.clientHeight;
     scrollRef.current.scrollTo({ top: Math.max(0, nowTop - h / 2), behavior: "smooth" });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // intentionally runs once on mount
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Biztosan törlöd ezt a programot?")) return;
@@ -149,43 +148,43 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
   };
 
   return (
-    <div className="flex-1 overflow-y-auto relative pb-20" ref={scrollRef}>
+    // min-h-0 is required so the flex-1 item can shrink below its content height,
+    // allowing overflow-y-auto to create a scrollable region instead of expanding forever.
+    <div className="flex-1 min-h-0 overflow-y-auto relative" ref={scrollRef}>
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-40 text-gray-400 text-sm">
           Még nincs program ezen a napon.
         </div>
       ) : (
-        <div className="relative" style={{ height: totalHeight }}>
-          {/* Hour labels */}
-          {hours.map(h => (
-            <div
-              key={h}
-              className="absolute text-right text-xs text-gray-400 font-medium select-none pointer-events-none"
-              style={{
-                top: (h - startHour) * PX_PER_HOUR,
-                left: 0,
-                width: LABEL_COL_W,
-                transform: "translateY(-50%)",
-                paddingRight: 8,
-                lineHeight: 1,
-              }}
-            >
-              {h}:00
-            </div>
-          ))}
+        // Flex row: [time labels | events]
+        // Both columns share the same totalHeight so grid lines and labels align.
+        <div className="flex pb-20" style={{ minHeight: totalHeight }}>
 
-          {/* Grid + events area */}
-          <div className="absolute" style={{ left: LABEL_COL_W, right: 0, top: 0, height: totalHeight }}>
+          {/* Left column: hour labels */}
+          <div className="relative shrink-0" style={{ width: LABEL_COL_W, height: totalHeight }}>
+            {hours.map(h => (
+              <div
+                key={h}
+                className="absolute right-0 text-right text-xs text-gray-400 font-medium select-none pr-2"
+                style={{ top: (h - startHour) * PX_PER_HOUR, transform: "translateY(-50%)", lineHeight: 1 }}
+              >
+                {h}:00
+              </div>
+            ))}
+          </div>
+
+          {/* Right column: grid + events */}
+          <div className="relative flex-1" style={{ height: totalHeight }}>
             {/* Grid lines */}
             {hours.map(h => (
               <div key={h}>
                 <div
-                  className="absolute left-0 right-0 border-t border-gray-200 dark:border-gray-700"
+                  className="absolute left-0 right-2 border-t border-gray-200 dark:border-gray-700"
                   style={{ top: (h - startHour) * PX_PER_HOUR }}
                 />
                 {h < endHour && (
                   <div
-                    className="absolute left-0 right-0 border-t border-dashed border-gray-100 dark:border-gray-800"
+                    className="absolute left-0 right-2 border-t border-dashed border-gray-100 dark:border-gray-800"
                     style={{ top: (h - startHour) * PX_PER_HOUR + PX_PER_HOUR / 2 }}
                   />
                 )}
@@ -195,11 +194,11 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
             {/* Current-time indicator */}
             {isToday && currentMinutes >= startHour * 60 && currentMinutes <= endHour * 60 && (
               <div
-                className="absolute left-0 right-0 z-10 pointer-events-none"
+                className="absolute left-0 right-2 pointer-events-none z-10"
                 style={{ top: (currentMinutes - startHour * 60) * PX_PER_MIN }}
               >
-                <div className="absolute inset-0 h-0.5 bg-red-500" />
-                <div className="absolute -left-1 -top-1.5 w-2.5 h-2.5 rounded-full bg-red-500" />
+                <div className="h-0.5 bg-red-500 w-full" />
+                <div className="absolute -left-1.5 -top-1.5 w-3 h-3 rounded-full bg-red-500" />
               </div>
             )}
 
@@ -213,7 +212,7 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
               const height    = Math.max((item.endMin - startMin) * PX_PER_MIN, MIN_HEIGHT_PX);
               const colW      = 100 / item.totalCols;
               const left      = `calc(${item.col * colW}% + ${EVENT_GAP}px)`;
-              const width     = `calc(${colW}% - ${EVENT_GAP * 2}px)`;
+              const width     = `calc(${colW}% - ${EVENT_GAP + 8}px)`; // 8px right margin
               const tall      = height > 52;
 
               if (item.type === "program") {
@@ -228,7 +227,10 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
                         ? "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 opacity-50"
                         : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"
                     }`}
-                    style={{ top, height, left, width, borderBottomStyle: openEnded ? "dashed" : "solid" }}
+                    style={{
+                      top, height, left, width,
+                      borderBottomStyle: openEnded ? "dashed" : "solid",
+                    }}
                   >
                     <div className="flex items-start h-full p-1.5 gap-1">
                       <div className="min-w-0 flex-1 overflow-hidden">
