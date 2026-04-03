@@ -45,10 +45,13 @@ function AddInfoItem() {
   return (
     <>
       <button
-        className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
+        className="flex flex-col items-center gap-0.5 text-white text-xs"
         onClick={openDialog}
       >
-        <MdAdd size={24} />
+        <div className="bg-white rounded-full size-10 -mt-4 shadow-lg flex items-center justify-center text-theme_primary">
+          <MdAdd size={22} />
+        </div>
+        <span>Hozzáad</span>
       </button>
       <dialog ref={dialogRef} className="rounded-xl mt-10 w-[90%] h-[40%]">
         <form

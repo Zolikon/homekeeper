@@ -23,8 +23,6 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
             id: recipe.id,
             ...updatedData,
         });
-        // The page will be revalidated by the server action, but we might want to refresh client cache if needed.
-        // Usually server action revalidatePath is enough.
     };
 
     const handleDelete = async () => {
@@ -41,20 +39,21 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
     return (
         <>
             <button
-                onClick={() => setIsDeleteModalOpen(true)}
-                className="size-12 md:size-16 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
-                title="Delete Recipe"
-            >
-                <MdDelete size={24} />
-            </button>
-            <button
                 onClick={() => setIsUpdateModalOpen(true)}
-                className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors"
+                className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
                 title="Update Recipe"
             >
-                <MdEdit size={24} />
+                <MdEdit size={22} />
+                <span>Szerkeszt</span>
             </button>
-
+            <button
+                onClick={() => setIsDeleteModalOpen(true)}
+                className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
+                title="Delete Recipe"
+            >
+                <MdDelete size={22} />
+                <span>Töröl</span>
+            </button>
 
             <RecipeModal
                 isOpen={isUpdateModalOpen}

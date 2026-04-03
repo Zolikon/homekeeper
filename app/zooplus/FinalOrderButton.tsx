@@ -17,16 +17,19 @@ function FinalOrderButton() {
   return (
     <>
       <button
-        className="size-12 md:size-16 bg-blue-500 disabled:bg-gray-400 text-white rounded-full flex items-center justify-center shadow-lg relative"
+        className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70 disabled:opacity-40 relative"
         onClick={openDialog}
         disabled={cart.length === 0}
       >
-        <MdShoppingCart size={24} />
-        {cart.length > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 text-xs size-6">
-            {cart.length}
-          </span>
-        )}
+        <span className="relative">
+          <MdShoppingCart size={22} />
+          {cart.length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[10px] size-4 flex items-center justify-center">
+              {cart.length}
+            </span>
+          )}
+        </span>
+        <span>Rendelés</span>
       </button>
       <dialog ref={dialogRef} className="rounded-xl mt-10 w-[90%] h-[80%]">
         <div className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center size-full">

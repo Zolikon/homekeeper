@@ -1,11 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { signIn, confirmSignIn } from "aws-amplify/auth";
+import { useState, useEffect } from "react";
+import { signIn, confirmSignIn, getCurrentUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(() => router.replace("/"))
+      .catch(() => {});
+  }, [router]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

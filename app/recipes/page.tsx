@@ -2,13 +2,8 @@ import { listRecipes } from "../__backend/RecipeService";
 import SearchInput from "./SearchInput";
 import Link from "next/link";
 import HomeButton from "../__components/HomeButton";
-import MenuHolder from "../__components/MenuHolder";
+import BottomNav from "../__components/BottomNav";
 import AddRecipeButton from "../__components/AddRecipeButton";
-
-// Wait, the requirements say "On this page user can see a search field for name only... and under them a list of all the available recipes displayed by name".
-// It doesn't explicitly ask for an "Add" button yet, but "user can add recipes under its own endpoint" is the high level goal.
-// "Subtasks -> - [ ] add a new endpoint under /recipes... On this page user can see a search field... and under them a list".
-// I will focus on the search and list.
 
 export default async function RecipesPage(props: {
     searchParams?: Promise<{
@@ -25,7 +20,7 @@ export default async function RecipesPage(props: {
             <div className="flex-none z-10">
                 <SearchInput />
             </div>
-            <div className="flex-grow overflow-y-auto p-4 pt-0">
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 pt-0">
                 {recipes.length === 0 ? (
                     <p className="text-center text-gray-500 mt-4">Nincsenek még receptek</p>
                 ) : (
@@ -43,10 +38,10 @@ export default async function RecipesPage(props: {
                     </ul>
                 )}
             </div>
-            <MenuHolder>
-                <AddRecipeButton />
+            <BottomNav>
                 <HomeButton />
-            </MenuHolder>
+                <AddRecipeButton />
+            </BottomNav>
         </div>
     );
 }

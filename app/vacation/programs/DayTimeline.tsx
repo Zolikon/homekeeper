@@ -5,7 +5,6 @@ import { deleteProgram } from "@/app/__backend/VacationService";
 import type { VacationProgram } from "@/app/__backend/vacation.types";
 import ProgramModal from "./ProgramModal";
 import ProgramDetailModal from "./ProgramDetailModal";
-import MenuHolder from "@/app/__components/MenuHolder";
 import { PiMapPin, PiPlus, PiPencil, PiTrash, PiAirplaneTakeoff } from "react-icons/pi";
 import Link from "next/link";
 
@@ -342,14 +341,12 @@ export default function DayTimeline({ dayId, programs, isToday, onProgramsChange
       )}
 
       {/* FAB */}
-      <MenuHolder>
-        <button
-          onClick={() => { setInitialStartTime(undefined); setAddModalOpen(true); }}
-          className="size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center"
-        >
-          <PiPlus className="text-2xl" />
-        </button>
-      </MenuHolder>
+      <button
+        onClick={() => { setInitialStartTime(undefined); setAddModalOpen(true); }}
+        className="fixed bottom-4 right-4 size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center z-50"
+      >
+        <PiPlus className="text-2xl" />
+      </button>
 
       {addModalOpen && (
         <ProgramModal

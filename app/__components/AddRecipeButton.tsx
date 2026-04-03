@@ -7,26 +7,29 @@ import { Recipe } from "../__backend/recipe.types";
 import { MdAdd } from "react-icons/md";
 
 export default function AddRecipeButton() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleAdd = async (recipe: Omit<Recipe, "id">) => {
-        await addRecipe(recipe);
-    };
+  const handleAdd = async (recipe: Omit<Recipe, "id">) => {
+    await addRecipe(recipe);
+  };
 
-    return (
-        <>
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="size-12 md:size-16 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
-            >
-                <MdAdd size={24} />
-            </button>
+  return (
+    <>
+      <button
+        className="flex flex-col items-center gap-0.5 text-white text-xs"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="bg-white rounded-full size-10 -mt-4 shadow-lg flex items-center justify-center text-theme_primary">
+          <MdAdd size={22} />
+        </div>
+        <span>Recept</span>
+      </button>
 
-            <RecipeModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleAdd}
-            />
-        </>
-    );
+      <RecipeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAdd}
+      />
+    </>
+  );
 }

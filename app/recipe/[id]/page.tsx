@@ -1,6 +1,6 @@
 import { getRecipe } from "../../__backend/RecipeService";
 import { getShoppingList } from "../../__backend/ShoppingService";
-import MenuHolder from "../../__components/MenuHolder";
+import BottomNav from "../../__components/BottomNav";
 import HomeButton from "../../__components/HomeButton";
 import Link from "next/link";
 import { MdArrowBack } from "react-icons/md";
@@ -16,7 +16,6 @@ export default async function RecipePage(props: { params: Promise<{ id: string }
     const recipe = await getRecipe(params.id);
     const shoppingList = await getShoppingList();
 
-    // Create a Map of normalized shopping list item names to ids for efficient lookup
     const normalizedShoppingDocs = new Map(
         shoppingList.map((item) => [normalizeString(item.name), item.id])
     );
@@ -34,16 +33,14 @@ export default async function RecipePage(props: { params: Promise<{ id: string }
 
     return (
         <div className="flex flex-col h-full w-full">
-            {/* Header with Back Button */}
-            <div className="flex items-center p-4 border-b dark:border-gray-800">
+            <div className="flex items-center p-4 border-b dark:border-gray-800 shrink-0">
                 <Link href="/recipes" className="mr-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <MdArrowBack size={24} className="text-gray-700 dark:text-gray-300" />
                 </Link>
                 <h1 className="text-2xl font-bold truncate flex-1 text-gray-900 dark:text-white">{recipe.name}</h1>
             </div>
 
-            <div className="flex-grow overflow-y-auto p-4 space-y-6">
-                {/* Ingredients Section */}
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-6">
                 <div>
                     <h2 className="text-lg font-semibold mb-2 border-b dark:border-gray-800 pb-1 text-gray-900 dark:text-white">Hozzávalók</h2>
                     <div className="flex flex-col space-y-1">
@@ -61,11 +58,11 @@ export default async function RecipePage(props: { params: Promise<{ id: string }
                 </div>
             </div>
 
-            <MenuHolder>
-                <RecipeActionButtons recipe={recipe} />
-                <ShoppingButton />
+            <BottomNav>
                 <HomeButton />
-            </MenuHolder>
+                <ShoppingButton />
+                <RecipeActionButtons recipe={recipe} />
+            </BottomNav>
         </div>
     );
 }
