@@ -10,9 +10,7 @@ function RefreshButton() {
   function handleClick() {
     setIsRefreshing(true);
     refreshContent()
-      .then(() => {
-        setIsRefreshing(false);
-      })
+      .then(() => setIsRefreshing(false))
       .catch((error) => {
         console.error("Error refreshing content:", error);
         setIsRefreshing(false);
@@ -23,13 +21,10 @@ function RefreshButton() {
     <button
       onClick={handleClick}
       disabled={isRefreshing}
-      className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
+      className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70 disabled:opacity-40"
     >
-      {!isRefreshing ? (
-        <MdRefresh size={24} key="norefresh" />
-      ) : (
-        <MdRefresh size={24} className="animate-spin" key="refresh" />
-      )}
+      <MdRefresh size={22} className={isRefreshing ? "animate-spin" : ""} />
+      <span>Frissít</span>
     </button>
   );
 }
