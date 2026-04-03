@@ -5,9 +5,10 @@ function ShoppingButton() {
   return (
     <Link
       href="/shopping"
-      className="size-12 md:size-16 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg"
+      className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
     >
-      <FaShoppingCart size={24} />
+      <FaShoppingCart size={22} />
+      <span>Bevásárlás</span>
     </Link>
   );
 }

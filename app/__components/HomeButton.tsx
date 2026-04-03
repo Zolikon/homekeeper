@@ -5,9 +5,10 @@ function HomeButton() {
   return (
     <Link
       href="/"
-      className="size-12 md:size-16 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg"
+      className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
     >
-      <IoHome size={24} />
+      <IoHome size={22} />
+      <span>Főoldal</span>
     </Link>
   );
 }
