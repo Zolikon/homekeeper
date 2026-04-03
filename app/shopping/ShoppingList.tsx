@@ -25,7 +25,7 @@ const ShoppingList: React.FC<{ items: ShoppingItem[] }> = ({ items }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-start gap-3 w-full h-full md:w-4/5">
+    <div className="flex flex-col items-center justify-start gap-3 w-full flex-1 min-h-0 md:w-4/5">
       <ItemTypeSelector currentType={selectedType} setCurrentType={setSelectedType} count={countItemTypes()} />
       <ScrollOverflowIndicator>
         {items
