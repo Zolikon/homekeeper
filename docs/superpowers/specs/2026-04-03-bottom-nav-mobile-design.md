@@ -12,7 +12,7 @@ Two mobile UX issues on the shopping list page (and globally):
 
 ## Solution
 
-Replace the floating FAB cluster (`MenuHolder`) and the footer with a **fixed-height bottom navigation bar** rendered as part of the root layout's flex column. Switch root layout to `100dvh` (dynamic viewport height) so it adapts correctly to mobile browser chrome.
+Replace the floating FAB cluster (`MenuHolder`) and the footer with a **fixed-height bottom navigation bar** rendered inline in each page/layout's flex column. Switch root layout to `100dvh` (dynamic viewport height) so it adapts correctly to mobile browser chrome.
 
 ## Layout Structure
 
@@ -31,54 +31,86 @@ body: h-screen flex-col overflow-hidden
 body: h-[100dvh] flex-col overflow-hidden
   header:    h-14 shrink-0  bg-theme_primary
   main:      flex-1 min-h-0 overflow-hidden
-    [page content — full available space, no FABs]
-  BottomNav: h-14 shrink-0  bg-theme_primary  ← always visible
+    [page content — structured as:]
+    flex flex-col h-full
+      [scrollable content area: flex-1 min-h-0 overflow-y-auto]
+      BottomNav: h-14 shrink-0 bg-theme_primary  ← always visible
 ```
 
 Key points:
 - `100dvh` adapts to mobile browser chrome (dynamic viewport height)
-- `main` uses `flex-1 min-h-0` — takes all remaining space between header and nav bar
-- Content never underlaps the nav bar (no fixed positioning, no padding hacks needed)
+- `main` uses `flex-1 min-h-0` — takes all remaining space between header and the page's bottom nav
+- `BottomNav` is rendered **per page/layout** (not in root layout) — pages have different action sets
+- Content never underlaps the nav bar — no fixed positioning, no padding hacks needed
 - Footer removed; version info dropped
+- Home page (`/`) and vacation sub-pages have no bottom nav — they already use inline navigation and have no `MenuHolder`
 
 ## BottomNav Component
 
 New component: `app/__components/BottomNav.tsx`
 
-- Renders `w-full h-14 bg-theme_primary flex items-center justify-around`
+- Renders `w-full h-14 bg-theme_primary flex items-center justify-around shrink-0`
 - Accepts `children` (nav items)
-- Each child: icon + label stacked (`flex flex-col items-center gap-0.5 text-white text-xs`)
-- Primary "Add" action: raised white circle button (`bg-white rounded-full text-theme_primary -mt-4 shadow-lg`) for visual prominence
+- Each child: icon + label stacked (`flex flex-col items-center gap-0.5 text-white text-xs px-3`)
+- Primary "Add" action gets a raised white circle: `bg-white rounded-full size-10 text-theme_primary -mt-4 shadow-lg flex items-center justify-center`
 
-`MenuHolder` is deleted (no longer used anywhere).
+`MenuHolder` component is deleted — all usages are replaced.
 
 ## Per-Page Nav Bar Contents
 
-| Page | Nav items (left → right) |
-|---|---|
-| `/shopping` | Home · Refresh · Show Hidden · **Add** · Cards |
-| `/recipes` | Home · **Add Recipe** |
-| `/recipe/[id]` | Home · Shopping · Edit · Delete |
-| `/zooplus` | Home · **Add Item** · Finalize Order |
-| `/info` | Home (Add is inline in the list) |
-| `/cards` | Home |
+| Page / Layout | Nav items (left → right) | File changed |
+|---|---|---|
+| `/shopping` | Home · Refresh · Show Hidden · **Add (+)** · Cards | `app/shopping/page.tsx` |
+| `/recipes` | Home · **Add Recipe (+)** | `app/recipes/page.tsx` |
+| `/recipe/[id]` | Home · Shopping · Edit · Delete | `app/recipe/[id]/page.tsx` |
+| `/zooplus` | Home · **Add Item (+)** · Finalize Order | `app/zooplus/page.tsx` |
+| `/info` | Home · **Add Info (+)** | `app/info/layout.tsx` |
+| `/cards` | Home | `app/cards/layout.tsx` |
 
-Pages that currently have no `MenuHolder` (`/cards`, `/info`) get a minimal `BottomNav` with just the Home button so navigation is consistent.
+Note: `/info` currently has `AddInfoItem` in `app/info/layout.tsx` via `MenuHolder` — it moves into `BottomNav` there. `/cards` currently has `HomeButton` in `app/cards/layout.tsx` via `MenuHolder` — it moves into `BottomNav` there.
 
-Vacation sub-pages (`/vacation`, `/vacation/programs`, `/vacation/flight-*`) use inline back-arrow navigation and are self-contained — they get no bottom nav, or a minimal Home-only bar if needed.
+`app/shopping/page.tsx` currently returns a bare fragment (`<>`). It must become a `flex flex-col h-full` div wrapper so `BottomNav` pins to the bottom correctly (with `ShoppingList` as `flex-1 min-h-0`).
+
+## DayTimeline FAB (Vacation Programs)
+
+`app/vacation/programs/DayTimeline.tsx` uses `MenuHolder` for a floating Add Program button. Since vacation sub-pages do **not** get a global bottom nav, this FAB is replaced with an inline `fixed` button (no `MenuHolder` wrapper needed — the positioning is applied directly):
+
+```tsx
+<button
+  onClick={...}
+  className="fixed bottom-4 right-4 size-14 rounded-full bg-theme_primary text-white shadow-lg flex items-center justify-center z-50"
+>
+  <PiPlus className="text-2xl" />
+</button>
+```
+
+This preserves the existing behavior while removing the `MenuHolder` dependency.
+
+## Layout Files That Need Structural Updates
+
+Pages/layouts that currently wrap content without height constraints need to become proper flex columns so `BottomNav` sits at the bottom. Specifically:
+
+- `app/info/layout.tsx` — change outer `div` to `flex flex-col h-full`; remove `MenuHolder`, add `BottomNav`
+- `app/cards/layout.tsx` — change outer `div` to `flex flex-col h-full`; remove `MenuHolder`, add `BottomNav`
+- `app/shopping/layout.tsx` — already uses flex-col h-full pattern; verify scroll area still works
+- `app/info/InfoList.tsx` — change `h-[50vh]` scroll div to `flex-1 min-h-0 overflow-y-auto` so it fills available space correctly
 
 ## Files Changed
 
-- `app/layout.tsx` — `h-[100dvh]`, remove `%` heights, remove `<footer>`, render `<BottomNav>` slot (or each page provides its own)
-- `app/__components/BottomNav.tsx` — new component (replaces MenuHolder)
-- `app/__components/MenuHolder.tsx` — deleted
-- `app/shopping/page.tsx` — use `BottomNav` instead of `MenuHolder`
-- `app/shopping/layout.tsx` — verify scroll area fills correctly
-- `app/recipes/page.tsx` — use `BottomNav`
-- `app/recipe/[id]/page.tsx` — use `BottomNav`
-- `app/zooplus/page.tsx` — use `BottomNav`
-- `app/cards/page.tsx` — add `BottomNav` with Home
-- `app/info/page.tsx` — add `BottomNav` with Home
+| File | Change |
+|---|---|
+| `app/layout.tsx` | `h-[100dvh]`, `h-14 shrink-0` header, `flex-1 min-h-0` main, remove `<footer>` |
+| `app/__components/BottomNav.tsx` | **New** — replaces MenuHolder |
+| `app/__components/MenuHolder.tsx` | **Deleted** |
+| `app/shopping/page.tsx` | `MenuHolder` → `BottomNav` |
+| `app/recipes/page.tsx` | `MenuHolder` → `BottomNav` |
+| `app/recipe/[id]/page.tsx` | `MenuHolder` → `BottomNav` |
+| `app/zooplus/page.tsx` | `MenuHolder` → `BottomNav` |
+| `app/info/layout.tsx` | `MenuHolder` → `BottomNav`; outer div → `flex flex-col h-full` |
+| `app/cards/layout.tsx` | `MenuHolder` → `BottomNav`; outer div → `flex flex-col h-full` |
+| `app/info/InfoList.tsx` | `h-[50vh]` → `flex-1 min-h-0 overflow-y-auto` |
+| `app/vacation/programs/DayTimeline.tsx` | `MenuHolder` → inline `fixed` button |
+| `app/zooplus/ZooplusList.tsx` | `h-2/3` → `flex-1 min-h-0 overflow-y-auto` |
 
 ## What Stays the Same
 
@@ -86,5 +118,5 @@ Vacation sub-pages (`/vacation`, `/vacation/programs`, `/vacation/flight-*`) use
 - All button functionality (only the visual container changes)
 - Shopping item design (checkbox, hide, delete flow)
 - Category selector (type tabs) at the top of the shopping list
-- Vacation sub-page layout (uses inline navigation)
-- `InfoList` scroll area (uses `h-[50vh]` — this may need to be updated to use `flex-1` approach)
+- Home page layout — no bottom nav added
+- Vacation sub-pages (`/vacation`, `/vacation/programs`, `/vacation/flight-*`) — inline navigation unchanged
