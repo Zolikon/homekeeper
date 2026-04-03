@@ -28,21 +28,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-b from-background to-background-to flex flex-col h-screen overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-b from-background to-background-to flex flex-col h-[100dvh] overflow-hidden`}
       >
         <ConfigureAmplify />
-        <header className="w-full bg-theme_primary text-white text-center h-[10%] flex gap-3 justify-center items-center select-none relative">
+        <header className="w-full bg-theme_primary text-white text-center h-14 shrink-0 flex gap-3 justify-center items-center select-none relative">
           <Link href="/" className="h-full flex items-center py-1"><img src="/HomeKeeper.svg" alt="Main icon" loading="lazy" className="object-contain h-full" /></Link>
           <div className="absolute right-4">
             <LogoutButton />
           </div>
         </header>
-        <main className="h-[85%] overflow-hidden">
+        <main className="flex-1 min-h-0 overflow-hidden">
           {children}
         </main>
-        <footer className="w-full bg-theme_primary text-white text-center h-[5%] flex gap-3 justify-center items-center select-none">
-          <p className="text-xs">{`HomeKeeper ${process.env.VERSION}`}</p>
-        </footer>
       </body>
     </html>
   );
