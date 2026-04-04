@@ -119,7 +119,7 @@ function AddInfoItem() {
                   className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                     selectedCategory === value
                       ? "bg-[rgb(29,181,147)] text-white"
-                      : "bg-gray-200 text-gray-700"
+                      : "bg-gray-300 text-gray-700"
                   }`}
                 >
                   <Icon size={20} />
@@ -134,14 +134,16 @@ function AddInfoItem() {
               {...register("content", {
                 required: true,
                 maxLength: CONTENT_MAX,
-                validate: (value) => {
-                  if (selectedCategory === "phone") {
-                    return /^[+\d][\d\s\-().]{5,20}$/.test(value) || "pattern";
-                  }
-                  if (selectedCategory === "link") {
-                    return /^https?:\/\/.+/.test(value) || "pattern";
-                  }
-                  return true;
+                validate: {
+                  pattern: (value) => {
+                    if (selectedCategory === "phone") {
+                      return /^[+\d][\d\s\-().]{5,20}$/.test(value);
+                    }
+                    if (selectedCategory === "link") {
+                      return /^https?:\/\/.+/.test(value);
+                    }
+                    return true;
+                  },
                 },
               })}
               placeholder={contentPlaceholders[selectedCategory]}
