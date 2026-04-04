@@ -7,6 +7,8 @@ import { addInfoItem, isNameAvailable, InfoCategory } from "../__backend/InfoSer
 
 type InfoFormValues = { name: string; content: string; category: InfoCategory };
 
+const CONTENT_MAX = 500;
+
 function translateValidationErrors(errorType: string) {
   switch (errorType) {
     case "required":
@@ -24,7 +26,6 @@ function translateValidationErrors(errorType: string) {
 
 function AddInfoItem() {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const CONTENT_MAX = 500;
   const {
     register,
     handleSubmit,
