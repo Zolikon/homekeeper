@@ -20,7 +20,7 @@ const schema = a.schema({
       id: a.string().required(),
       title: a.string().required(),
       content: a.string().required(),
-      category: a.string(),
+      category: a.string(),   // "none" | "phone" | "address" | "link" — optional for back-compat
     })
     .authorization((allow) => [allow.authenticated()]),
   Recipe: a
