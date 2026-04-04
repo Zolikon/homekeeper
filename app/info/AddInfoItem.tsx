@@ -116,7 +116,7 @@ function AddInfoItem() {
                   key={value}
                   type="button"
                   onClick={() => handleCategoryChange(value)}
-                  className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors w-16 ${
                     selectedCategory === value
                       ? "bg-[rgb(29,181,147)] text-white"
                       : "bg-gray-300 text-gray-700"
