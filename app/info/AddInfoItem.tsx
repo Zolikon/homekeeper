@@ -82,9 +82,9 @@ function AddInfoItem() {
         </div>
         <span>Hozzáad</span>
       </button>
-      <dialog ref={dialogRef} className="rounded-xl mt-10 w-[90%] min-h-[55%]">
+      <dialog ref={dialogRef} className="rounded-xl mt-10 w-[90%]">
         <form
-          className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center size-full"
+          className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
           <h2 className="text-xl font-bold">Info hozzáadása</h2>
@@ -128,7 +128,7 @@ function AddInfoItem() {
               ))}
             </div>
           </div>
-          <label className="flex flex-col gap-1 items-center justify-between w-full flex-grow">
+          <label className="flex flex-col gap-1 items-center justify-between w-full">
             <span>Tartalom</span>
             <textarea
               {...register("content", {
@@ -147,7 +147,7 @@ function AddInfoItem() {
                 },
               })}
               placeholder={contentPlaceholders[selectedCategory]}
-              className={`p-2 rounded-md h-full resize-none w-full ${errors.content ? "bg-red-200" : ""}`}
+              className={`p-2 rounded-md h-28 resize-none w-full ${errors.content ? "bg-red-200" : ""}`}
               autoComplete="off"
             />
             <div className="flex justify-between w-full">

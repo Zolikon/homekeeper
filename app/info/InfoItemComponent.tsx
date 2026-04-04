@@ -65,14 +65,14 @@ function InfoItemComponent({ infoItem }: { infoItem: InfoItem }) {
         <MdTouchApp size={24} />
       </div>
       <dialog ref={dialogRef} className="w-[90vw] min-h-[40vh] rounded-xl">
-        <div className="flex flex-col items-center justify-between p-2 min-h-[40vh]">
+        <div className="flex flex-col items-center justify-between gap-2 p-2 min-h-[40vh]">
           <h2 className="font-bold text-2xl">{infoItem.title}</h2>
           <p className="flex-grow border-2 border-black m-2 w-[90%] p-2 rounded-lg">{infoItem.content}</p>
           {action && (
             <a
               href={action.href}
-              target={infoItem.category === "link" ? "_blank" : undefined}
-              rel={infoItem.category === "link" ? "noopener noreferrer" : undefined}
+              target={infoItem.category === "link" || infoItem.category === "address" ? "_blank" : undefined}
+              rel={infoItem.category === "link" || infoItem.category === "address" ? "noopener noreferrer" : undefined}
               className={`${action.color} text-white rounded-lg p-3 w-full flex items-center justify-center gap-2 font-semibold`}
             >
               <action.Icon size={20} />
