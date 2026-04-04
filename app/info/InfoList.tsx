@@ -15,7 +15,7 @@ function InfoList({ infoList }: { infoList: InfoItem[] }) {
 
   return (
     <div className="flex flex-col flex-1 min-h-0 w-full items-center gap-2 px-2">
-      <Resetableinput placeholder="search" value={search} onChange={setSearch} />
+      <Resetableinput placeholder="keresés" value={search} onChange={setSearch} />
       <div className="flex flex-col items-center justify-start gap-3 w-full flex-1 min-h-0 overflow-y-auto">
         {filteredList.map((item) => (
           <InfoItemComponent key={item.id} infoItem={item} />

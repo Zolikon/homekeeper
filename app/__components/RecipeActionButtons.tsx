@@ -41,7 +41,7 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
             <button
                 onClick={() => setIsUpdateModalOpen(true)}
                 className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
-                title="Update Recipe"
+                title="Recept szerkesztése"
             >
                 <MdEdit size={22} />
                 <span>Szerkeszt</span>
@@ -49,7 +49,7 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
             <button
                 onClick={() => setIsDeleteModalOpen(true)}
                 className="flex flex-col items-center gap-0.5 text-white text-xs py-2 px-3 active:opacity-70"
-                title="Delete Recipe"
+                title="Recept törlése"
             >
                 <MdDelete size={22} />
                 <span>Töröl</span>
@@ -66,8 +66,8 @@ export default function RecipeActionButtons({ recipe }: RecipeActionButtonsProps
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={handleDelete}
-                title="Delete Recipe"
-                message={`Are you sure you want to delete "${recipe.name}"? This action cannot be undone.`}
+                title="Recept törlése"
+                message={`Biztosan törlöd a(z) "${recipe.name}" receptet? Ez a művelet nem visszafordítható.`}
                 isDeleting={isDeleting}
             />
         </>

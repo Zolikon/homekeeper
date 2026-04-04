@@ -49,7 +49,7 @@ export default function ScrollOverflowIndicator({ children }: Props) {
       )}
       <div
         ref={containerRef}
-        className="w-full flex flex-col items-center flex-1 min-h-0 overflow-y-auto gap-2"
+        className="w-full flex flex-col items-center flex-1 min-h-0 overflow-y-auto gap-2 pb-3"
         style={{ scrollbarWidth: "thin" }}
       >
         {children}

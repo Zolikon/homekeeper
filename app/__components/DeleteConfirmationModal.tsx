@@ -32,14 +32,14 @@ export default function DeleteConfirmationModal({
                         disabled={isDeleting}
                         className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                     >
-                        Cancel
+                        Mégse
                     </button>
                     <button
                         onClick={onConfirm}
                         disabled={isDeleting}
                         className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center min-w-[80px]"
                     >
-                        {isDeleting ? "Deleting..." : "Delete"}
+                        {isDeleting ? "Törlés..." : "Töröl"}
                     </button>
                 </div>
             </div>

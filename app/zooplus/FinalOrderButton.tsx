@@ -47,7 +47,7 @@ function FinalOrderButton() {
               onClick={() => dialogRef.current?.close()}
               className="bg-blue-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2 flex items-center justify-center"
             >
-              Close
+              Bezár
             </button>
           </div>
         </div>

@@ -8,8 +8,9 @@ import ShoppingItemComponent from "./ShoppingItem";
 import { useShopping } from "./ShoppingContext";
 
 const ShoppingList: React.FC<{ items: ShoppingItem[] }> = ({ items }) => {
-  const [selectedType, setSelectedType] = React.useState<ShoppingItemType>(ShoppingItemType.FOOD);
   const context = useShopping();
+  const selectedType = context?.selectedType ?? ShoppingItemType.FOOD;
+  const setSelectedType = (type: ShoppingItemType) => context?.setSelectedType(type);
 
   function countItemTypes(): Record<ShoppingItemType, number> {
     return items.reduce(

@@ -27,7 +27,7 @@ export default async function Home() {
     : false;
 
   return (
-    <div className="w-full flex flex-col items-center justify-start h-full">
+    <div className="w-full flex flex-col items-center justify-start h-full relative">
       <img src="/cats.png" alt="cats" className="h-1/4 p-3 z-0 object-contain sm:hidden" />
       <div className="font-extrabold text-center w-full gap-3 grid grid-cols-2 grid-rows-3 overflow-auto px-4 pt-4 pb-2">
         <PanelButton link="/shopping">
@@ -39,16 +39,16 @@ export default async function Home() {
               </span>
             )}
           </div>
-          <p>Shop</p>
+          <p>Bevásárlás</p>
           {pendingShoppingItems === 0 && <MdDone size={ICON_SIZE} />}
         </PanelButton>
         <PanelButton link="/recipes">
           <PiBowlFoodFill size={ICON_SIZE} />
-          <p>Recipes</p>
+          <p>Receptek</p>
         </PanelButton>
         <PanelButton link="/cards">
           <MdCreditCard size={ICON_SIZE} />
-          <p>Cards</p>
+          <p>Kártyák</p>
         </PanelButton>
         <PanelButton link="/zooplus">
           <MdPets size={ICON_SIZE} />
@@ -56,7 +56,7 @@ export default async function Home() {
         </PanelButton>
         <PanelButton link="/info">
           <MdInfoOutline size={ICON_SIZE} />
-          <p>Info</p>
+          <p>Infó</p>
         </PanelButton>
         <PanelButton link="/vacation">
           <PiAirplaneTakeoff size={ICON_SIZE} />
@@ -86,6 +86,7 @@ export default async function Home() {
           <MdCall size={ICON_SIZE} />
         </a>
       </div>
+      <p className="absolute bottom-2 text-xs text-white">v{process.env.VERSION}</p>
     </div>
   );
 }

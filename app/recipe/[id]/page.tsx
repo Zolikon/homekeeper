@@ -23,9 +23,9 @@ export default async function RecipePage(props: { params: Promise<{ id: string }
     if (!recipe) {
         return (
             <div className="flex flex-col items-center justify-center h-full">
-                <p className="text-xl text-gray-500">Recipe not found</p>
+                <p className="text-xl text-gray-500">A recept nem található</p>
                 <Link href="/recipes" className="mt-4 text-blue-500 underline">
-                    Back to Recipes
+                    Vissza a receptekhez
                 </Link>
             </div>
         );

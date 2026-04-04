@@ -48,27 +48,27 @@ function AddPetOrderItem() {
       <dialog ref={dialogRef} className="rounded-xl mt-10">
         <div className="flex flex-col gap-4 p-4 bg-gray-200 rounded-lg items-center">
           <form className="flex flex-col gap-4 p-4 items-center" onSubmit={handleSubmit(onSubmit)}>
-            <h2 className="text-xl font-bold">Add Item</h2>
+            <h2 className="text-xl font-bold">Tétel hozzáadása</h2>
             <label className="flex flex-col gap-1 items-center justify-between">
-              <span>Name</span>
+              <span>Név</span>
               <input
                 disabled={isSubmitting}
                 autoFocus
-                placeholder="Name of item (required)"
+                placeholder="Tétel neve (kötelező)"
                 type="text"
                 {...register("name", { required: true, maxLength: 20 })}
                 className={`p-2 rounded-md ${errors.name ? "bg-red-300" : ""} disabled:bg-gray-300 `}
                 autoComplete="off"
               />
               {errors.name && (
-                <span className="text-red-500">{errors.name.type === "required" ? "Required" : "Too long"}</span>
+                <span className="text-red-500">{errors.name.type === "required" ? "Kötelező" : "Túl hosszú"}</span>
               )}
             </label>
             <label className="flex flex-col gap-1 items-center justify-between">
-              <span>Url</span>
+              <span>URL</span>
               <input
                 disabled={isSubmitting}
-                placeholder="Link to item (required)"
+                placeholder="Link a termékhez (kötelező)"
                 type="text"
                 {...register("url", { required: true, maxLength: 300 })}
                 className="p-2 rounded-md disabled:bg-gray-300 "
@@ -76,10 +76,10 @@ function AddPetOrderItem() {
               />
             </label>
             <label className="flex flex-col gap-1 items-center justify-between">
-              <span>Bundle size</span>
+              <span>Kiszerelés</span>
               <input
                 disabled={isSubmitting}
-                placeholder="e.g. 24*70g (optional)"
+                placeholder="pl. 24*70g (opcionális)"
                 type="text"
                 {...register("bundleSize", { maxLength: 20 })}
                 className="p-2 rounded-md disabled:bg-gray-300 "
@@ -90,18 +90,18 @@ function AddPetOrderItem() {
               {!isSubmitting ? (
                 <>
                   <button className="bg-red-500 text-white rounded-lg p-2 w-1/2" type="button" onClick={closeDialog}>
-                    Cancel
+                    Mégse
                   </button>
                   <button
                     className="bg-blue-500 disabled:bg-gray-400 text-white rounded-lg p-2 w-1/2"
                     type="submit"
                     disabled={!isDirty || Object.keys(errors).length > 0}
                   >
-                    Add
+                    Hozzáad
                   </button>
                 </>
               ) : (
-                <div>Saving...</div>
+                <div>Mentés...</div>
               )}
             </div>
           </form>
