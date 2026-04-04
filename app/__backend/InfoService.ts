@@ -11,10 +11,13 @@ const cookieClient = generateServerClientUsingCookies<Schema>({
 });
 const client = cookieClient.models.InfoStore;
 
+export type InfoCategory = "none" | "phone" | "address" | "link";
+
 export type InfoItem = {
   id: string;
   title: string;
   content: string;
+  category: InfoCategory;
   normalizedTitle?: string;
 };
 
@@ -32,6 +35,7 @@ export async function getInfoList(): Promise<InfoItem[]> {
       id: item.id,
       title: item.title,
       content: item.content,
+      category: (item.category as InfoCategory) ?? "none",
       normalizedTitle: normalized(item.title),
     }))
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -42,11 +46,12 @@ export async function isNameAvailable(title: string): Promise<boolean> {
   return data.length === 0;
 }
 
-export async function addInfoItem(title: string, content: string): Promise<void> {
+export async function addInfoItem(title: string, content: string, category: InfoCategory): Promise<void> {
   await client.create({
     id: title,
     title,
     content,
+    category,
   });
   revalidatePath("/");
 }
