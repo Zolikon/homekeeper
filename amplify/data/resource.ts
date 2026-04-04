@@ -20,6 +20,7 @@ const schema = a.schema({
       id: a.string().required(),
       title: a.string().required(),
       content: a.string().required(),
+      category: a.string(),
     })
     .authorization((allow) => [allow.authenticated()]),
   Recipe: a
