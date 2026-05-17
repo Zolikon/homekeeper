@@ -6,7 +6,7 @@ import { PanelButton } from "./__components/PanelButton";
 
 const ICON_SIZE = 24;
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 function daysUntil(dateStr: string): number {
   const today = new Date();
@@ -17,10 +17,7 @@ function daysUntil(dateStr: string): number {
 }
 
 export default async function Home() {
-  const [pendingShoppingItems, vacationInfo] = await Promise.all([
-    countPendingItems(),
-    getVacationInfo(),
-  ]);
+  const [pendingShoppingItems, vacationInfo] = await Promise.all([countPendingItems(), getVacationInfo()]);
   const daysToVacation = vacationInfo ? daysUntil(vacationInfo.startDate) : null;
   const vacationUnderway = vacationInfo
     ? daysToVacation !== null && daysToVacation <= 0 && daysUntil(vacationInfo.endDate) >= 0
@@ -28,7 +25,7 @@ export default async function Home() {
 
   return (
     <div className="w-full flex flex-col items-center justify-start h-full relative">
-      <img src="/cats.png" alt="cats" className="h-1/4 p-3 z-0 object-contain sm:hidden" />
+      <img src="/beastlogo.png" alt="cats" className="h-1/3 p-3 z-0 object-contain sm:hidden" />
       <div className="font-extrabold text-center w-full gap-3 grid grid-cols-2 grid-rows-3 overflow-auto px-4 pt-4 pb-2">
         <PanelButton link="/shopping">
           <div className="relative">
@@ -76,12 +73,18 @@ export default async function Home() {
         )}
       </div>
       <div className="flex gap-2 items-center h-1/5 p-4 justify-around w-full">
-        <a href="tel:+36202967034" className="flex gap-1 items-center justify-center bg-blue-700 text-white rounded-full size-24 p-2">
+        <a
+          href="tel:+36202967034"
+          className="flex gap-1 items-center justify-center bg-blue-700 text-white rounded-full size-24 p-2"
+        >
           <p className="font-extrabold text-3xl">🐄</p>
           <MdCall size={ICON_SIZE} />
         </a>
 
-        <a href="tel:+36205843422" className="flex gap-1 items-center justify-center bg-blue-700 text-white rounded-full size-24 p-2">
+        <a
+          href="tel:+36205843422"
+          className="flex gap-1 items-center justify-center bg-blue-700 text-white rounded-full size-24 p-2"
+        >
           <p className="font-extrabold text-3xl">🐈</p>
           <MdCall size={ICON_SIZE} />
         </a>
