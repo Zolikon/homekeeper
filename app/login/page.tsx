@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { signIn, confirmSignIn, getCurrentUser } from "aws-amplify/auth";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter();
-
   useEffect(() => {
     getCurrentUser()
-      .then(() => router.replace("/"))
+      .then(() => window.location.assign("/"))
       .catch(() => {});
-  }, [router]);
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,8 +32,9 @@ export default function LoginPage() {
       }
 
       if (result.isSignedIn) {
-        router.push("/");
-        router.refresh();
+        // Hard navigation so the freshly-set auth cookies reach the
+        // server middleware and Next's Router Cache is bypassed.
+        window.location.assign("/");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bejelentkezési hiba");
@@ -52,8 +50,7 @@ export default function LoginPage() {
     try {
       const result = await confirmSignIn({ challengeResponse: newPassword });
       if (result.isSignedIn) {
-        router.push("/");
-        router.refresh();
+        window.location.assign("/");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Jelszóváltási hiba");
